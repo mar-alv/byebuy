@@ -52,13 +52,6 @@ export function SignInForm() {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => toast("Event has been created")}
-      >
-        Default
-      </Button>
       <FieldGroup>
         <FieldSet>
           <FieldLegend>
