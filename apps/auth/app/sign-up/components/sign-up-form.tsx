@@ -1,6 +1,6 @@
 "use client";
 
-import { useSignIn } from "@clerk/nextjs";
+import { useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -19,57 +19,55 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { env } from "@/env";
-import { SignIn, signInSchema } from "../schemas";
+import { SignUp, signUpSchema } from "../schemas";
 
-export function SignInForm() {
+export function SignUpForm() {
   const router = useRouter();
-  const { signIn, fetchStatus } = useSignIn();
+  const { signUp, fetchStatus } = useSignUp();
 
   const loading = fetchStatus === "fetching";
 
-  const form = useForm<SignIn>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<SignUp>({
+    resolver: zodResolver(signUpSchema),
   });
 
-  async function handleSubmit({ email, password }: SignIn) {
-    const { error } = await signIn.password({
+  async function handleSubmit({
+    email,
+    password,
+    firstName,
+    lastName,
+  }: SignUp) {
+    const { error } = await signUp.password({
       emailAddress: email,
       password,
+      firstName,
+      lastName,
     });
 
-    if (error || signIn.status !== "complete") {
-      toast.error("Não foi possível entrar. Tente novamente.");
+    if (error || signUp.status !== "complete") {
+      toast.error("Não foi possível concluir o cadastro. Tente novamente.");
 
       return;
     }
 
-    await signIn.finalize({
-      navigate: () => {
-        router.push(env.NEXT_PUBLIC_CATALOG_URL);
-      },
+    await signUp.finalize({
+      navigate: () => router.push(env.NEXT_PUBLIC_CATALOG_URL),
     });
   }
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => toast("Event has been created")}
-      >
-        Default
-      </Button>
       <FieldGroup>
         <FieldSet>
           <FieldLegend>
-            <Typography.Heading.M>Voltou, né? 😏</Typography.Heading.M>
+            <Typography.Heading.M>Seu garimpo começa aqui</Typography.Heading.M>
           </FieldLegend>
 
           <FieldDescription>
-            Então bora transformar bagunça em dinheiro de novo
+            Desapegue do que não usa e encontre o que você precisa
           </FieldDescription>
 
-          {/* TODO: add sign in with google */}
+          {/* TODO: add sign up with google */}
 
           <FieldSeparator />
 
@@ -78,6 +76,50 @@ export function SignInForm() {
           </Typography.Paragraph.S>
 
           <FieldGroup>
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                name="firstName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Nome</FieldLabel>
+
+                    <Input
+                      id={field.name}
+                      disabled={loading}
+                      placeholder="John"
+                      {...field}
+                    />
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="lastName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Sobrenome</FieldLabel>
+
+                    <Input
+                      id={field.name}
+                      disabled={loading}
+                      placeholder="Doe"
+                      {...field}
+                    />
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
             <Controller
               name="email"
               control={form.control}
