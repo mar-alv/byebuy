@@ -1,6 +1,12 @@
 import { Logo } from "@repo/ui/components/logo";
+import { Metadata } from "next";
 import Image from "next/image";
 import { SignUpForm } from "./components/sign-up-form";
+
+export const metadata: Metadata = {
+  title: "Criar Conta | ByeBuy",
+  description: "Desapegue do que não usa e encontre o que você precisa",
+};
 
 export default function SignUp() {
   return (

@@ -1,6 +1,12 @@
 import { Logo } from "@repo/ui/components/logo";
+import { Metadata } from "next";
 import Image from "next/image";
 import { SignInForm } from "./components/sign-in-form";
+
+export const metadata: Metadata = {
+  title: "Entrar | ByeBuy",
+  description: "Então bora transformar bagunça em dinheiro de novo",
+};
 
 export default function SignIn() {
   return (
