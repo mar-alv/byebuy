@@ -32,7 +32,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider>
-          <main className="flex">{children}</main>
+          <main className="w-full p-4 grid min-h-screen md:grid-cols-2">
+            {children}
+          </main>
           <Toaster {...sonnerConfig} />
         </ClerkProvider>
       </body>

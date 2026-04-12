@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/components/ui/field";
 import { Input } from "@repo/ui/components/ui/input";
 import { Typography } from "@repo/ui/components/typography";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -168,10 +169,17 @@ export function SignUpForm() {
         </FieldSet>
 
         <Field orientation="horizontal">
-          <Button disabled={loading} size="lg" type="submit">
+          <Button disabled={loading} size="lg" type="submit" className="w-full">
             Partiu garimpar
           </Button>
         </Field>
+
+        <div className="gap-0.5 flex items-center">
+          <Typography.Paragraph.S>Já faz parte?</Typography.Paragraph.S>
+          <Button asChild variant="link" className="p-0">
+            <Link href="/sign-in">Bora entrar</Link>
+          </Button>
+        </div>
       </FieldGroup>
     </form>
   );
