@@ -1,6 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { sonnerConfig } from "@repo/ui/components/ui/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,10 +32,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider>
-          <main className="flex">
-            <SignIn />
-            {children}
-          </main>
+          <main className="flex">{children}</main>
+          <Toaster {...sonnerConfig} />
         </ClerkProvider>
       </body>
     </html>
