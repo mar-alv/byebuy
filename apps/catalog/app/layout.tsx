@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { Header } from "@repo/ui/components/header/index";
 import { sonnerConfig } from "@repo/ui/components/ui/sonner";
 import { ThemeProvider } from "@repo/ui/components/ui/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -34,6 +35,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+						<Header />
             {children}
             <Toaster {...sonnerConfig} />
           </ThemeProvider>
