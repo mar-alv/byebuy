@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { sonnerConfig } from "@repo/ui/components/ui/sonner";
+import { ThemeProvider } from "@repo/ui/components/ui/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -26,10 +27,17 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider>
-          <main className="w-full p-4 grid min-h-screen md:grid-cols-2">
-            {children}
-          </main>
-          <Toaster {...sonnerConfig} />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="w-full p-4 grid min-h-screen md:grid-cols-2">
+              {children}
+            </main>
+            <Toaster {...sonnerConfig} />
+          </ThemeProvider>
         </ClerkProvider>
       </body>
     </html>
