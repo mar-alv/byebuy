@@ -127,7 +127,7 @@ export function SignInForm() {
 
         <div className="gap-0.5 flex items-center">
           <Typography.Paragraph.S>Só olhando?</Typography.Paragraph.S>
-          <Button asChild variant="link" className="p-0">
+          <Button asChild disabled={loading} variant="link" className="p-0">
             <Link href="/sign-up">Cria uma conta aí</Link>
           </Button>
         </div>
