@@ -12,7 +12,14 @@
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
-    "sonner": "^2.0.7"
+    "@clerk/nextjs": ">=7",
+    "@hookform/resolvers": ">=5",
+    "next": ">=16",
+    "sonner": ">=2",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "react-hook-form": ">=7",
+    "zod": ">=4"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -30,8 +37,6 @@
     "lucide-react": "^1.7.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
     "shadcn": "^4.1.2",
     "tailwind-merge": "^3.5.0",
     "tailwind-variants": "^3.2.2",
