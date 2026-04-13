@@ -1,3 +1,4 @@
+// TODO: add home redirect
 export function Logo() {
   return (
     <img
@@ -8,6 +9,7 @@ export function Logo() {
   );
 }
 
+// TODO: add home redirect
 Logo.NoTexts = function LogoNoTexts() {
   return (
     <img
