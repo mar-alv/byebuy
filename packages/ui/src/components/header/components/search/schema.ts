@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-// TODO: update validations
 export const searchSchema = z.object({
   query: z
     .string()
-    .min(1, "O e-mail é obrigatório.")
-    .max(254, "O e-mail é muito longo.")
-    .pipe(z.email("Digite um e-mail válido.")),
+    .trim()
+    .min(1, "Digite algo para pesquisar.")
+    .max(100, "A busca é muito longa.")
+    .refine((value) => value.length > 0, {
+      message: "Digite algo válido.",
+    }),
 });
 
 export type Search = z.infer<typeof searchSchema>;
