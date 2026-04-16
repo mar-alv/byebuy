@@ -35,8 +35,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-						<Header />
-            {children}
+            <Header />
+            <main className="max-w-306 w-full mx-auto px-6">
+              {children}
+            </main>
             <Toaster {...sonnerConfig} />
           </ThemeProvider>
         </ClerkProvider>
