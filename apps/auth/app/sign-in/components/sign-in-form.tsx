@@ -44,6 +44,7 @@ export function SignInForm() {
       return;
     }
 
+    // TODO: make use of redirect_url
     await signIn.finalize({
       navigate: () => {
         router.push(APP_URLS.catalog);
