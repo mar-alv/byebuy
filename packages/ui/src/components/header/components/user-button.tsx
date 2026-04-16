@@ -40,7 +40,7 @@ export function UserButton() {
           </Show>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="center">
         <Show when="signed-in">
           <DropdownMenuItem
             onClick={() => signOut({ redirectUrl: `${APP_URLS.auth}/sign-in` })}
