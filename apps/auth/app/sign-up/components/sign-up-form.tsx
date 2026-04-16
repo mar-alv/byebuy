@@ -15,11 +15,11 @@ import {
 } from "@repo/ui/components/ui/field";
 import { Input } from "@repo/ui/components/ui/input";
 import { Typography } from "@repo/ui/components/typography";
+import { APP_URLS } from "@repo/ui/config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { env } from "@/env";
 import { SignUp, signUpSchema } from "../schemas";
 
 export function SignUpForm() {
@@ -52,7 +52,7 @@ export function SignUpForm() {
     }
 
     await signUp.finalize({
-      navigate: () => router.push(env.NEXT_PUBLIC_CATALOG_URL),
+      navigate: () => router.push(APP_URLS.catalog),
     });
   }
 
