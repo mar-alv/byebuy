@@ -77,13 +77,15 @@ function ListItem({
   );
 }
 
+// TODO: add mobile version
 export function Header() {
   return (
-    <header>
+    <header className="max-w-306 w-full mx-auto px-6">
       <div className="flex justify-between items-center">
         <Logo.NoTexts />
         <Search />
         <div className="gap-2 flex items-center">
+          <ModeToggle />
           <UserButton />
           <FavoritesButton />
           <CartButton />
@@ -133,10 +135,6 @@ export function Header() {
             >
               <Link href="/docs">Docs</Link>
             </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <ModeToggle />
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
