@@ -1,11 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { APP_URLS } from "@repo/ui/config";
 
 const isAuthRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 
-  const url = process.env.NEXT_PUBLIC_CATALOG_URL;
+  const url = APP_URLS.catalog;
 
   if (userId && isAuthRoute(req) && url) {
     return Response.redirect(new URL(url));
