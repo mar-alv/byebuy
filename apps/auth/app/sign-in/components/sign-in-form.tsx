@@ -17,13 +17,14 @@ import { Input } from "@repo/ui/components/ui/input";
 import { Typography } from "@repo/ui/components/typography";
 import { APP_URLS } from "@repo/ui/config";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { SignIn, signInSchema } from "../schemas";
 
 export function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { signIn, fetchStatus } = useSignIn();
 
   const loading = fetchStatus === "fetching";
@@ -44,10 +45,11 @@ export function SignInForm() {
       return;
     }
 
-    // TODO: make use of redirect_url
+    const redirectUrl = searchParams.get("redirect_url") || APP_URLS.catalog;
+
     await signIn.finalize({
       navigate: () => {
-        router.push(APP_URLS.catalog);
+        router.push(redirectUrl);
       },
     });
   }
