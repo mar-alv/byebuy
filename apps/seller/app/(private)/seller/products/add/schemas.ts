@@ -73,10 +73,11 @@ export const addProductSchema = z.object({
       path: ["allowsShipping"],
     }),
 
-  tags: z
+  // TODO: make use of
+  /* tags: z
     .array(z.string().min(1).max(30))
     .max(10, "Máximo de 10 tags.")
-    .optional(),
+    .optional(), */
 });
 
 export type AddProduct = z.infer<typeof addProductSchema>;
