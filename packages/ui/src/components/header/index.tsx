@@ -93,7 +93,8 @@ export function Header() {
         </div>
       </div>
 
-      <NavigationMenu>
+      {/* TODO: uncomment */}
+      {/* <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
@@ -138,7 +139,7 @@ export function Header() {
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
-      </NavigationMenu>
+      </NavigationMenu> */}
     </header>
   );
 }
