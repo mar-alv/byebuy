@@ -5,7 +5,6 @@ import { SignUpForm } from "./components/sign-up-form";
 
 export const metadata: Metadata = {
   title: "Criar Conta | ByeBuy",
-  description: "Desapegue do que não usa e encontre o que você precisa",
 };
 
 export default function SignUp() {

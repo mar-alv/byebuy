@@ -5,7 +5,6 @@ import { SignInForm } from "./components/sign-in-form";
 
 export const metadata: Metadata = {
   title: "Entrar | ByeBuy",
-  description: "Então bora transformar bagunça em dinheiro de novo",
 };
 
 export default function SignIn() {
