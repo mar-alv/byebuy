@@ -29,13 +29,62 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/ui/select";
+import Image from "next/image";
+import { UploadCloud, X } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import { AddProduct, addProductSchema } from "../schemas";
 
 export function AddProductForm() {
+  const [files, setFiles] = useState<(File & { preview: string })[]>([]);
+
   const form = useForm({
     resolver: zodResolver(addProductSchema),
   });
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const imageFiles = acceptedFiles.filter((file) =>
+        file.type.startsWith("image/"),
+      );
+
+      setFiles((prev) => {
+        const updated = [
+          ...prev,
+          ...imageFiles.map((file) =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+            }),
+          ),
+        ].slice(0, 10);
+
+        // 🔗 sync with form
+        form.setValue("images", updated, { shouldValidate: true });
+
+        return updated;
+      });
+    },
+    [form],
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
+    },
+    maxFiles: 10,
+  });
+
+  function removeFile(name: string) {
+    setFiles((prev) => {
+      const updated = prev.filter((file) => file.name !== name);
+
+      form.setValue("images", updated, { shouldValidate: true });
+
+      return updated;
+    });
+  }
 
   async function handleSubmit({}: AddProduct) {
     // TODO: add new product
@@ -49,7 +98,7 @@ export function AddProductForm() {
   }
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-6xl">
       <CardHeader className="border-b">
         <CardTitle>Adicionar novo produto</CardTitle>
         <CardDescription>
@@ -59,50 +108,23 @@ export function AddProductForm() {
 
       <CardContent>
         <form id="add-product-form" onSubmit={form.handleSubmit(handleSubmit)}>
-          <FieldGroup className="space-y-8">
-            <FieldSet>
-              <FieldLegend>Informações do produto</FieldLegend>
-              <FieldDescription>
-                Dados principais do item que você deseja vender
-              </FieldDescription>
-
-              <FieldGroup className="mt-4 space-y-4">
-                <Controller
-                  name="name"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Nome</FieldLabel>
-                      <Input placeholder="Teclado mecânico" {...field} />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  name="description"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Descrição</FieldLabel>
-                      <Input placeholder="Descreva seu produto..." {...field} />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    Informações do produto
+                  </CardTitle>
+                  <CardDescription>Dados principais do item</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <Controller
-                    name="price"
+                    name="name"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Preço</FieldLabel>
-                        <Input type="number" {...field} />
+                        <FieldLabel>Nome</FieldLabel>
+                        <Input placeholder="Teclado mecânico" {...field} />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
@@ -111,211 +133,297 @@ export function AddProductForm() {
                   />
 
                   <Controller
-                    name="quantity"
+                    name="description"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Quantidade</FieldLabel>
-                        <Input type="number" {...field} />
+                        <FieldLabel>Descrição</FieldLabel>
+                        <Input
+                          placeholder="Descreva seu produto..."
+                          {...field}
+                        />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
                       </Field>
                     )}
                   />
-                </div>
-              </FieldGroup>
-            </FieldSet>
 
-            <FieldSet>
-              <FieldLegend>Estado do produto</FieldLegend>
-              <FieldDescription>
-                Informe as condições atuais do item
-              </FieldDescription>
-
-              <FieldGroup className="mt-4 space-y-4">
-                <Controller
-                  name="condition"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Condição</FieldLabel>
-
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma condição" />
-                        </SelectTrigger>
-
-                        <SelectContent>
-                          <SelectItem value="new">Novo</SelectItem>
-                          <SelectItem value="like_new">Como novo</SelectItem>
-                          <SelectItem value="good">Bom</SelectItem>
-                          <SelectItem value="fair">Regular</SelectItem>
-                          <SelectItem value="poor">Ruim</SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                  <div className="grid grid-cols-2 gap-4">
+                    <Controller
+                      name="price"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Preço</FieldLabel>
+                          <Input type="number" {...field} />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
                       )}
-                    </Field>
-                  )}
-                />
+                    />
 
-                <Controller
-                  name="usageTime"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>Tempo de uso</FieldLabel>
-                      <Input placeholder="Ex: 6 meses" {...field} />
-                    </Field>
-                  )}
-                />
+                    <Controller
+                      name="quantity"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Quantidade</FieldLabel>
+                          <Input type="number" {...field} />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
 
-                <Controller
-                  name="defects"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>Defeitos</FieldLabel>
-                      <Input placeholder="Arranhões, marcas..." {...field} />
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-
-            <FieldSet>
-              <FieldLegend>Localização</FieldLegend>
-              <FieldDescription>
-                Onde o produto está disponível
-              </FieldDescription>
-
-              <FieldGroup className="mt-4 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Estado do produto</CardTitle>
+                  <CardDescription>Condições atuais do item</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <Controller
-                    name="location.city"
+                    name="condition"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Cidade</FieldLabel>
+                        <FieldLabel>Condição</FieldLabel>
+
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione uma condição" />
+                          </SelectTrigger>
+
+                          <SelectContent>
+                            <SelectItem value="new">Novo</SelectItem>
+                            <SelectItem value="like_new">Como novo</SelectItem>
+                            <SelectItem value="good">Bom</SelectItem>
+                            <SelectItem value="fair">Regular</SelectItem>
+                            <SelectItem value="poor">Ruim</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="usageTime"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel>Tempo de uso</FieldLabel>
+                        <Input placeholder="Ex: 6 meses" {...field} />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="defects"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel>Defeitos</FieldLabel>
+                        <Input placeholder="Arranhões, marcas..." {...field} />
+                      </Field>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Localização</CardTitle>
+                  <CardDescription>
+                    Onde o produto está disponível
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <Controller
+                      name="location.city"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Cidade</FieldLabel>
+                          <Input {...field} />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+
+                    <Controller
+                      name="location.state"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Estado</FieldLabel>
+                          <Input {...field} />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+                  </div>
+
+                  <Controller
+                    name="location.zipCode"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel>CEP</FieldLabel>
                         <Input {...field} />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
+                      </Field>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Entrega</CardTitle>
+                  <CardDescription>
+                    Defina como o produto será entregue
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Controller
+                    name="delivery.allowsShipping"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field orientation="horizontal">
+                        <FieldContent>
+                          <FieldLabel>Permite envio?</FieldLabel>
+                          <FieldDescription>
+                            Enviar pelos correios ou transportadora
+                          </FieldDescription>
+                        </FieldContent>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
                       </Field>
                     )}
                   />
 
                   <Controller
-                    name="location.state"
+                    name="delivery.shippingCost"
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Estado</FieldLabel>
-                        <Input {...field} />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel>Custo de envio</FieldLabel>
+                        <Input type="number" {...field} />
                       </Field>
                     )}
                   />
-                </div>
 
-                <Controller
-                  name="location.zipCode"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>CEP</FieldLabel>
-                      <Input {...field} />
-                    </Field>
+                  <Controller
+                    name="delivery.allowsPickup"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field orientation="horizontal">
+                        <FieldContent>
+                          <FieldLabel>Retirada no local?</FieldLabel>
+                          <FieldDescription>
+                            O comprador pode retirar pessoalmente
+                          </FieldDescription>
+                        </FieldContent>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="delivery.pickupInstructions"
+                    control={form.control}
+                    render={({ field }) => (
+                      <Field>
+                        <FieldLabel>Instruções de retirada</FieldLabel>
+                        <Input {...field} />
+                      </Field>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Imagens</CardTitle>
+                  <CardDescription>Adicione fotos do produto</CardDescription>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  <div
+                    {...getRootProps()}
+                    className={`border-2 border-dashed rounded-lg cursor-pointer transition-all h-45 flex items-center justify-center ${
+                      isDragActive
+                        ? "border-primary bg-muted"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    <input {...getInputProps()} />
+                    <div className="flex flex-col items-center text-center px-4">
+                      <UploadCloud className="w-8 h-8 mb-2" />
+                      <p className="text-xs text-muted-foreground">
+                        Clique ou arraste imagens
+                      </p>
+                    </div>
+                  </div>
+
+                  {files.length > 0 && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {files.map((file) => (
+                        <div
+                          key={file.name}
+                          className="relative border rounded-lg overflow-hidden"
+                        >
+                          <Image
+                            src={file.preview}
+                            alt={file.name}
+                            fill
+                            className="object-cover"
+                          />
+                          <Button
+                            size="icon"
+                            variant="destructive"
+                            className="absolute top-1 right-1 h-6 w-6"
+                            onClick={() => removeFile(file.name)}
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   )}
-                />
-              </FieldGroup>
-            </FieldSet>
-
-            <FieldSet>
-              <FieldLegend>Entrega</FieldLegend>
-              <FieldDescription>
-                Defina como o produto será entregue
-              </FieldDescription>
-
-              <FieldGroup className="mt-4 space-y-4">
-                <Controller
-                  name="delivery.allowsShipping"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field orientation="horizontal">
-                      <FieldContent>
-                        <FieldLabel>Permite envio?</FieldLabel>
-                        <FieldDescription>
-                          Enviar pelos correios ou transportadora
-                        </FieldDescription>
-                      </FieldContent>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  name="delivery.shippingCost"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>Custo de envio</FieldLabel>
-                      <Input type="number" {...field} />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  name="delivery.allowsPickup"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field orientation="horizontal">
-                      <FieldContent>
-                        <FieldLabel>Retirada no local?</FieldLabel>
-                        <FieldDescription>
-                          O comprador pode retirar pessoalmente
-                        </FieldDescription>
-                      </FieldContent>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  name="delivery.pickupInstructions"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>Instruções de retirada</FieldLabel>
-                      <Input {...field} />
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </FieldGroup>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </form>
       </CardContent>
 
       <CardFooter className="border-t">
         <Field className="w-full">
           <Button
-            // TODO: uncomment
-            // disabled={loading}
             size="lg"
             type="submit"
             form="add-product-form"

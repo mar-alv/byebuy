@@ -29,9 +29,13 @@ export const addProductSchema = z.object({
     ),
 
   images: z
-    .array(z.string().url("Imagem inválida."))
-    .min(1, "Pelo menos uma imagem é obrigatória.")
-    .max(10, "Máximo de 10 imagens."),
+    .array(
+      z.instanceof(File).refine((file) => file.type.startsWith("image/"), {
+        message: "Apenas imagens são permitidas",
+      }),
+    )
+    .min(1, "Pelo menos uma imagem é obrigatória")
+    .max(10, "Máximo de 10 imagens"),
 
   condition: z.enum(["new", "like_new", "good", "fair", "poor"], {
     message: "A condição é obrigatória.",
