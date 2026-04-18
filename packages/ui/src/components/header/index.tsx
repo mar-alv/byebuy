@@ -78,6 +78,7 @@ function ListItem({
 }
 
 // TODO: add mobile version
+// TODO: make it fixed
 export function Header() {
   return (
     <header className="max-w-306 w-full mx-auto px-6">
