@@ -40,8 +40,15 @@ export function UserButton() {
           </Show>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center">
+      <DropdownMenuContent align="center" className="w-fit">
         <Show when="signed-in">
+          <DropdownMenuItem
+            onClick={() =>
+              router.push(`${APP_URLS.seller}/seller/products/add`)
+            }
+          >
+            Adicionar produto
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => signOut({ redirectUrl: `${APP_URLS.auth}/sign-in` })}
           >
