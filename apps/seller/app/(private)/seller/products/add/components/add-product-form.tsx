@@ -296,7 +296,10 @@ export function AddProductForm() {
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Cidade</FieldLabel>
-                                  <Input {...field} />
+                                  <Input
+                                    placeholder="Porto Alegre"
+                                    {...field}
+                                  />
                                   {fieldState.invalid && (
                                     <FieldError errors={[fieldState.error]} />
                                   )}
@@ -310,7 +313,10 @@ export function AddProductForm() {
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Estado</FieldLabel>
-                                  <Input {...field} />
+                                  <Input
+                                    placeholder="Rio Grande do Sul"
+                                    {...field}
+                                  />
                                   {fieldState.invalid && (
                                     <FieldError errors={[fieldState.error]} />
                                   )}
@@ -320,13 +326,14 @@ export function AddProductForm() {
                           </div>
                         </FieldGroup>
 
+                        {/* TODO: get info based on typed zipCode */}
                         <Controller
                           name="location.zipCode"
                           control={form.control}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>CEP</FieldLabel>
-                              <Input {...field} />
+                              <Input placeholder="xxxxx-xxx" {...field} />
                             </Field>
                           )}
                         />
