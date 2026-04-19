@@ -78,24 +78,39 @@ export const addProductSchema = z.object({
 
   delivery: z
     .object({
-      allowsShipping: z.boolean(),
-      shippingCostType: z.enum(["free", "fixed", "calculated"]).optional(),
+      methods: z
+        .array(z.enum(["shipping", "pickup"]))
+        .min(1, "Selecione pelo menos um método de entrega."),
 
-      shippingCost: z
-        .string()
-        .optional()
-        .transform((val) =>
-          val === undefined || val === "" ? undefined : Number(val),
-        )
-        .pipe(z.number().min(0).optional()),
+      shipping: z
+        .object({
+          type: z.enum(["free", "fixed", "calculated"]),
+          price: z
+            .string()
+            .optional()
+            .transform((val) =>
+              val === undefined || val === "" ? undefined : Number(val),
+            )
+            .pipe(z.number().min(0).optional()),
+        })
+        .optional(),
 
-      allowsPickup: z.boolean(),
-      pickupInstructions: z.string().max(500).optional(),
+      pickup: z
+        .object({
+          instructions: z.string().max(500).optional(),
+        })
+        .optional(),
     })
-    .refine((data) => data.allowsShipping || data.allowsPickup, {
-      message: "Selecione pelo menos um método de entrega.",
-      path: ["allowsShipping"],
-    }),
+    .refine(
+      (data) => {
+        if (data.methods.includes("shipping") && !data.shipping) return false;
+        return true;
+      },
+      {
+        message: "Configure o envio se selecionar shipping.",
+        path: ["shipping"],
+      },
+    ),
 
   // TODO: make use of
   /* tags: z

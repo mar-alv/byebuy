@@ -48,6 +48,7 @@ export function AddProductForm() {
   });
 
   const zipCode = form.watch("location.zipCode");
+  const methods = form.watch("delivery.methods");
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -430,74 +431,136 @@ export function AddProductForm() {
                       Defina como o produto será entregue
                     </CardDescription>
                   </CardHeader>
+
                   <CardContent>
                     <FieldSet>
-                      <FieldLegend className="sr-only">Entrega</FieldLegend>
-
                       <FieldGroup className="space-y-6">
-                        <FieldGroup>
-                          <Controller
-                            name="delivery.allowsShipping"
-                            control={form.control}
-                            render={({ field }) => (
-                              <Field orientation="horizontal">
-                                <FieldContent>
-                                  <FieldLabel>Permite envio?</FieldLabel>
-                                  <FieldDescription>
-                                    Enviar pelos correios ou transportadora
-                                  </FieldDescription>
-                                </FieldContent>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </Field>
-                            )}
-                          />
+                        <Controller
+                          name="delivery.methods"
+                          control={form.control}
+                          render={({ field }) => (
+                            <Field>
+                              <FieldLabel>Métodos de entrega</FieldLabel>
 
-                          <Controller
-                            name="delivery.shippingCost"
-                            control={form.control}
-                            render={({ field }) => (
-                              <Field>
-                                <FieldLabel>Custo de envio</FieldLabel>
-                                <Input type="number" {...field} />
-                              </Field>
-                            )}
-                          />
-                        </FieldGroup>
+                              <div className="flex gap-6 mt-2">
+                                <label className="flex items-center gap-2 text-sm">
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value?.includes("shipping")}
+                                    onChange={(e) => {
+                                      const checked = e.target.checked;
+                                      const current = field.value || [];
 
-                        <FieldGroup>
-                          <Controller
-                            name="delivery.allowsPickup"
-                            control={form.control}
-                            render={({ field }) => (
-                              <Field orientation="horizontal">
-                                <FieldContent>
-                                  <FieldLabel>Retirada no local?</FieldLabel>
-                                  <FieldDescription>
-                                    O comprador pode retirar pessoalmente
-                                  </FieldDescription>
-                                </FieldContent>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </Field>
-                            )}
-                          />
+                                      field.onChange(
+                                        checked
+                                          ? [...current, "shipping"]
+                                          : current.filter(
+                                              (v: string) => v !== "shipping",
+                                            ),
+                                      );
+                                    }}
+                                  />
+                                  Envio
+                                </label>
 
-                          <Controller
-                            name="delivery.pickupInstructions"
-                            control={form.control}
-                            render={({ field }) => (
-                              <Field>
-                                <FieldLabel>Instruções de retirada</FieldLabel>
-                                <Input {...field} />
-                              </Field>
+                                <label className="flex items-center gap-2 text-sm">
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value?.includes("pickup")}
+                                    onChange={(e) => {
+                                      const checked = e.target.checked;
+                                      const current = field.value || [];
+
+                                      field.onChange(
+                                        checked
+                                          ? [...current, "pickup"]
+                                          : current.filter(
+                                              (v: string) => v !== "pickup",
+                                            ),
+                                      );
+                                    }}
+                                  />
+                                  Retirada
+                                </label>
+                              </div>
+                            </Field>
+                          )}
+                        />
+
+                        {methods?.includes("shipping") && (
+                          <div className="border rounded-lg p-4 space-y-4">
+                            <Typography.Paragraph.S className="font-medium">
+                              Envio
+                            </Typography.Paragraph.S>
+
+                            <Controller
+                              name="delivery.shipping.type"
+                              control={form.control}
+                              render={({ field }) => (
+                                <Field>
+                                  <FieldLabel>Tipo de envio</FieldLabel>
+
+                                  <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Tipo de envio" />
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                      <SelectItem value="free">
+                                        Grátis
+                                      </SelectItem>
+                                      <SelectItem value="fixed">
+                                        Fixo
+                                      </SelectItem>
+                                      <SelectItem value="calculated">
+                                        Calculado
+                                      </SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </Field>
+                              )}
+                            />
+
+                            {form.watch("delivery.shipping.type") ===
+                              "fixed" && (
+                              <Controller
+                                name="delivery.shipping.price"
+                                control={form.control}
+                                render={({ field }) => (
+                                  <Field>
+                                    <FieldLabel>Preço</FieldLabel>
+                                    <Input type="number" {...field} />
+                                  </Field>
+                                )}
+                              />
                             )}
-                          />
-                        </FieldGroup>
+                          </div>
+                        )}
+
+                        {methods?.includes("pickup") && (
+                          <div className="border rounded-lg p-4 space-y-4">
+                            <Typography.Paragraph.S className="font-medium">
+                              Retirada
+                            </Typography.Paragraph.S>
+
+                            <Controller
+                              name="delivery.pickup.instructions"
+                              control={form.control}
+                              render={({ field }) => (
+                                <Field>
+                                  <FieldLabel>Instruções</FieldLabel>
+                                  <Input
+                                    placeholder="Ex: após 18h"
+                                    {...field}
+                                  />
+                                </Field>
+                              )}
+                            />
+                          </div>
+                        )}
                       </FieldGroup>
                     </FieldSet>
                   </CardContent>
