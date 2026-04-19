@@ -2,6 +2,7 @@
 
 import { useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { urls } from "@repo/configs";
 import { Button } from "@repo/ui/components/ui/button";
 import {
   Field,
@@ -15,7 +16,6 @@ import {
 } from "@repo/ui/components/ui/field";
 import { Input } from "@repo/ui/components/ui/input";
 import { Typography } from "@repo/ui/components/typography";
-import { APP_URLS } from "@repo/ui/config";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -52,7 +52,7 @@ export function SignUpForm() {
     }
 
     await signUp.finalize({
-      navigate: () => router.push(APP_URLS.catalog),
+      navigate: () => router.push(urls.catalog),
     });
   }
 
