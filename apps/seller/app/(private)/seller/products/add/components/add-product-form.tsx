@@ -6,15 +6,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/ui/card";
-import { Checkbox } from "@repo/ui/components/ui/checkbox";
 import {
   Field,
-  FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -165,7 +161,7 @@ export function AddProductForm() {
                         Informações do produto
                       </FieldLegend>
 
-                      <FieldGroup className="space-y-4">
+                      <FieldGroup className="gap-0 space-y-4">
                         <Controller
                           name="name"
                           control={form.control}
@@ -202,7 +198,7 @@ export function AddProductForm() {
                           )}
                         />
 
-                        <FieldGroup>
+                        <FieldGroup className="gap-0">
                           <div className="grid grid-cols-2 gap-4">
                             <Controller
                               name="price"
@@ -248,82 +244,6 @@ export function AddProductForm() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">
-                      Estado do produto
-                    </CardTitle>
-                    <CardDescription>Condições atuais do item</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <FieldSet>
-                      <FieldLegend className="sr-only">
-                        Estado do produto
-                      </FieldLegend>
-
-                      <FieldGroup className="space-y-4">
-                        <Controller
-                          name="condition"
-                          control={form.control}
-                          render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid}>
-                              <FieldLabel>Condição</FieldLabel>
-
-                              <Select
-                                value={field.value}
-                                onValueChange={field.onChange}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione uma condição" />
-                                </SelectTrigger>
-
-                                <SelectContent>
-                                  <SelectItem value="new">Novo</SelectItem>
-                                  <SelectItem value="like_new">
-                                    Como novo
-                                  </SelectItem>
-                                  <SelectItem value="good">Bom</SelectItem>
-                                  <SelectItem value="fair">Regular</SelectItem>
-                                  <SelectItem value="poor">Ruim</SelectItem>
-                                </SelectContent>
-                              </Select>
-
-                              {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                              )}
-                            </Field>
-                          )}
-                        />
-
-                        <Controller
-                          name="usageTime"
-                          control={form.control}
-                          render={({ field }) => (
-                            <Field>
-                              <FieldLabel>Tempo de uso</FieldLabel>
-                              <Input placeholder="Ex: 6 meses" {...field} />
-                            </Field>
-                          )}
-                        />
-
-                        <Controller
-                          name="defects"
-                          control={form.control}
-                          render={({ field }) => (
-                            <Field>
-                              <FieldLabel>Defeitos</FieldLabel>
-                              <Input
-                                placeholder="Arranhões, marcas..."
-                                {...field}
-                              />
-                            </Field>
-                          )}
-                        />
-                      </FieldGroup>
-                    </FieldSet>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
                     <CardTitle className="text-base">Localização</CardTitle>
                     <CardDescription>
                       Onde o produto está disponível
@@ -332,7 +252,7 @@ export function AddProductForm() {
 
                   <CardContent>
                     <FieldSet>
-                      <FieldGroup className="space-y-4">
+                      <FieldGroup className="gap-0 space-y-4">
                         <Controller
                           name="location.zipCode"
                           control={form.control}
@@ -423,6 +343,141 @@ export function AddProductForm() {
                     </FieldSet>
                   </CardContent>
                 </Card>
+              </div>
+
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Imagens</CardTitle>
+                    <CardDescription>Adicione fotos do produto</CardDescription>
+                  </CardHeader>
+
+                  <CardContent>
+                    <FieldSet>
+                      <FieldLegend className="sr-only">Imagens</FieldLegend>
+
+                      <FieldGroup className="gap-0 space-y-4">
+                        <div
+                          {...getRootProps()}
+                          className={`border-2 border-dashed rounded-lg cursor-pointer transition-all h-45 flex items-center justify-center ${
+                            isDragActive
+                              ? "border-primary bg-muted"
+                              : "border-gray-300"
+                          }`}
+                        >
+                          <input {...getInputProps()} />
+                          <div className="flex flex-col items-center text-center px-4">
+                            <UploadCloud className="w-8 h-8 mb-2" />
+                            <p className="text-xs text-muted-foreground">
+                              Clique ou arraste imagens
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="h-42.5 grid grid-cols-2 gap-3 content-start overflow-y-auto">
+                          {images.map((image) => (
+                            <div
+                              key={image.name}
+                              className="relative group border rounded-lg overflow-hidden h-24"
+                            >
+                              <Image
+                                src={image.preview}
+                                alt={image.name}
+                                fill
+                                className="object-cover"
+                              />
+
+                              <Button
+                                size="icon"
+                                variant="destructive"
+                                onClick={() => removeImage(image.name)}
+                                className="cursor-pointer absolute top-1 right-1 h-6 w-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </FieldGroup>
+                    </FieldSet>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      Estado do produto
+                    </CardTitle>
+                    <CardDescription>Condições atuais do item</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FieldSet>
+                      <FieldLegend className="sr-only">
+                        Estado do produto
+                      </FieldLegend>
+
+                      <FieldGroup className="gap-0 space-y-4">
+                        <Controller
+                          name="condition"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                              <FieldLabel>Condição</FieldLabel>
+
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione uma condição" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectItem value="new">Novo</SelectItem>
+                                  <SelectItem value="like_new">
+                                    Como novo
+                                  </SelectItem>
+                                  <SelectItem value="good">Bom</SelectItem>
+                                  <SelectItem value="fair">Regular</SelectItem>
+                                  <SelectItem value="poor">Ruim</SelectItem>
+                                </SelectContent>
+                              </Select>
+
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
+
+                        <Controller
+                          name="usageTime"
+                          control={form.control}
+                          render={({ field }) => (
+                            <Field>
+                              <FieldLabel>Tempo de uso</FieldLabel>
+                              <Input placeholder="Ex: 6 meses" {...field} />
+                            </Field>
+                          )}
+                        />
+
+                        <Controller
+                          name="defects"
+                          control={form.control}
+                          render={({ field }) => (
+                            <Field>
+                              <FieldLabel>Defeitos</FieldLabel>
+                              <Input
+                                placeholder="Arranhões, marcas..."
+                                {...field}
+                              />
+                            </Field>
+                          )}
+                        />
+                      </FieldGroup>
+                    </FieldSet>
+                  </CardContent>
+                </Card>
 
                 <Card>
                   <CardHeader>
@@ -434,7 +489,7 @@ export function AddProductForm() {
 
                   <CardContent>
                     <FieldSet>
-                      <FieldGroup className="space-y-6">
+                      <FieldGroup className="gap-0 space-y-6">
                         <Controller
                           name="delivery.methods"
                           control={form.control}
@@ -565,84 +620,21 @@ export function AddProductForm() {
                     </FieldSet>
                   </CardContent>
                 </Card>
-              </div>
 
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-base">Imagens</CardTitle>
-                    <CardDescription>Adicione fotos do produto</CardDescription>
-                  </CardHeader>
-
-                  <CardContent>
-                    <FieldSet>
-                      <FieldLegend className="sr-only">Imagens</FieldLegend>
-
-                      <FieldGroup className="space-y-4">
-                        <div
-                          {...getRootProps()}
-                          className={`border-2 border-dashed rounded-lg cursor-pointer transition-all h-45 flex items-center justify-center ${
-                            isDragActive
-                              ? "border-primary bg-muted"
-                              : "border-gray-300"
-                          }`}
-                        >
-                          <input {...getInputProps()} />
-                          <div className="flex flex-col items-center text-center px-4">
-                            <UploadCloud className="w-8 h-8 mb-2" />
-                            <p className="text-xs text-muted-foreground">
-                              Clique ou arraste imagens
-                            </p>
-                          </div>
-                        </div>
-
-                        {images.length > 0 && (
-                          <div className="grid grid-cols-2 gap-3">
-                            {images.map((image) => (
-                              <div
-                                key={image.name}
-                                className="relative group border rounded-lg overflow-hidden h-24"
-                              >
-                                <Image
-                                  src={image.preview}
-                                  alt={image.name}
-                                  fill
-                                  className="object-cover"
-                                />
-
-                                <Button
-                                  size="icon"
-                                  variant="destructive"
-                                  onClick={() => removeImage(image.name)}
-                                  className="cursor-pointer absolute top-1 right-1 h-6 w-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </FieldGroup>
-                    </FieldSet>
-                  </CardContent>
-                </Card>
+                <Field className="w-full">
+                  <Button
+                    size="lg"
+                    type="submit"
+                    form="add-product-form"
+                    className="w-full"
+                  >
+                    Publicar produto
+                  </Button>
+                </Field>
               </div>
             </div>
           </form>
         </CardContent>
-
-        <CardFooter className="border-t">
-          <Field className="w-full">
-            <Button
-              size="lg"
-              type="submit"
-              form="add-product-form"
-              className="w-full"
-            >
-              Publicar produto
-            </Button>
-          </Field>
-        </CardFooter>
       </Card>
     </div>
   );
