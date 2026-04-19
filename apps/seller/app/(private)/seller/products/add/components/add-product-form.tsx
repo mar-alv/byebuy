@@ -30,8 +30,8 @@ import {
   SelectValue,
 } from "@repo/ui/components/ui/select";
 import Image from "next/image";
-import { UploadCloud, X } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Trash2, UploadCloud } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import { AddProduct, addProductSchema } from "../schemas";
@@ -202,7 +202,11 @@ export function AddProductForm() {
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Preço</FieldLabel>
-                                  <Input type="number" {...field} />
+                                  <Input
+                                    placeholder="R$ 99.99"
+                                    type="number"
+                                    {...field}
+                                  />
                                   {fieldState.invalid && (
                                     <FieldError errors={[fieldState.error]} />
                                   )}
@@ -216,7 +220,11 @@ export function AddProductForm() {
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Quantidade</FieldLabel>
-                                  <Input type="number" {...field} />
+                                  <Input
+                                    placeholder="10"
+                                    type="number"
+                                    {...field}
+                                  />
                                   {fieldState.invalid && (
                                     <FieldError errors={[fieldState.error]} />
                                   )}
@@ -316,7 +324,7 @@ export function AddProductForm() {
 
                   <CardContent>
                     <FieldSet>
-                                            <FieldGroup className="space-y-4">
+                      <FieldGroup className="space-y-4">
                         <Controller
                           name="location.zipCode"
                           control={form.control}
@@ -328,33 +336,33 @@ export function AddProductForm() {
                           )}
                         />
 
-                          <div className="grid grid-cols-3 gap-4">
-                            <Controller
-                              name="location.street"
-                              control={form.control}
-                              render={({ field, fieldState }) => (
-                                <Field
-data-invalid={fieldState.invalid}
+                        <div className="grid grid-cols-3 gap-4">
+                          <Controller
+                            name="location.street"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                              <Field
+                                data-invalid={fieldState.invalid}
                                 className="col-span-2"
->
-                                  <FieldLabel>Rua</FieldLabel>
+                              >
+                                <FieldLabel>Rua</FieldLabel>
                                 <Input placeholder="Av. Paulista" {...field} />
-                                                                  </Field>
-                              )}
-                            />
+                              </Field>
+                            )}
+                          />
 
-                            <Controller
-                              name="location.number"
-                              control={form.control}
-                              render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                  <FieldLabel>Número</FieldLabel>
+                          <Controller
+                            name="location.number"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                              <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel>Número</FieldLabel>
                                 <Input placeholder="123" {...field} />
-                                                                  </Field>
-                              )}
-                            />
-                          </div>
-                        
+                              </Field>
+                            )}
+                          />
+                        </div>
+
                         <Controller
                           name="location.complement"
                           control={form.control}
@@ -523,7 +531,7 @@ data-invalid={fieldState.invalid}
                             {files.map((file) => (
                               <div
                                 key={file.name}
-                                className="relative border rounded-lg overflow-hidden h-24"
+                                className="relative group border rounded-lg overflow-hidden h-24"
                               >
                                 <Image
                                   src={file.preview}
@@ -531,13 +539,14 @@ data-invalid={fieldState.invalid}
                                   fill
                                   className="object-cover"
                                 />
+
                                 <Button
                                   size="icon"
                                   variant="destructive"
-                                  className="absolute top-1 right-1 h-6 w-6 z-10"
                                   onClick={() => removeFile(file.name)}
+                                  className="cursor-pointer absolute top-1 right-1 h-6 w-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
-                                  <X className="w-3 h-3" />
+                                  <Trash2 className="w-3 h-3" />
                                 </Button>
                               </div>
                             ))}
