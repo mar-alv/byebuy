@@ -1,6 +1,7 @@
 "use client";
 
 import { Show, useClerk, useUser } from "@clerk/nextjs";
+import { urls } from "@repo/configs";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "../../ui/button";
@@ -12,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import { Typography } from "../../typography";
-import { APP_URLS } from "../../../config";
 
 export function UserButton() {
   const { signOut } = useClerk();
@@ -43,23 +43,19 @@ export function UserButton() {
       <DropdownMenuContent align="center" className="w-fit">
         <Show when="signed-in">
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`${APP_URLS.seller}/seller/products/add`)
-            }
+            onClick={() => router.push(`${urls.seller}/seller/products/add`)}
           >
             Adicionar produto
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => signOut({ redirectUrl: `${APP_URLS.auth}/sign-in` })}
+            onClick={() => signOut({ redirectUrl: `${urls.auth}/sign-in` })}
           >
             Sair
           </DropdownMenuItem>
         </Show>
 
         <Show when="signed-out">
-          <DropdownMenuItem
-            onClick={() => router.push(`${APP_URLS.auth}/sign-in`)}
-          >
+          <DropdownMenuItem onClick={() => router.push(`${urls.auth}/sign-in`)}>
             Entrar
           </DropdownMenuItem>
         </Show>

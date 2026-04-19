@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { urls } from "@repo/configs";
+import { Search as SearchSchema, searchSchema } from "@repo/schemas/catalog";
 import { SearchIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { APP_URLS } from "../../../../config";
-import { Button } from "../../../ui/button";
-import { Field, FieldError, FieldGroup, FieldSet } from "../../../ui/field";
-import { Input } from "../../../ui/input";
-import { Search as SearchSchema, searchSchema } from "./schema";
+import { Button } from "../../ui/button";
+import { Field, FieldError, FieldGroup, FieldSet } from "../../ui/field";
+import { Input } from "../../ui/input";
 
 export function Search() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export function Search() {
   });
 
   async function handleSubmit({ query }: SearchSchema) {
-    router.push(`${APP_URLS.catalog}/search?q=${query}`);
+    router.push(`${urls.catalog}/search?q=${query}`);
   }
 
   return (

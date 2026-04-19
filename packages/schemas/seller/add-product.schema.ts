@@ -1,19 +1,5 @@
 import { z } from "zod";
 
-export interface ViaCepResponse {
-  cep: string;
-  logradouro: string;
-  complemento: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
-  ibge: string;
-  gia: string;
-  ddd: string;
-  siafi: string;
-  erro?: boolean;
-}
-
 export const addProductSchema = z.object({
   name: z
     .string("O nome é obrigatório.")

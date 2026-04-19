@@ -15,6 +15,7 @@
   "peerDependencies": {
     "@clerk/nextjs": ">=7",
     "@hookform/resolvers": ">=5",
+		"@repo/schemas": "workspace:*",
     "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19",

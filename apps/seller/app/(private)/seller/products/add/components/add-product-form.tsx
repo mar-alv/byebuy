@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AddProduct, addProductSchema } from "@repo/schemas/seller";
 import { Button } from "@repo/ui/components/ui/button";
 import {
   Card,
@@ -27,14 +28,12 @@ import {
 } from "@repo/ui/components/ui/select";
 import { Typography } from "@repo/ui/components/typography";
 import { WysiwygEditor } from "@repo/ui/components/wysiwyg-editor";
-import to from "await-to-js";
-import axios, { AxiosResponse } from "axios";
 import Image from "next/image";
 import { Trash2, UploadCloud } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
-import { AddProduct, addProductSchema, ViaCepResponse } from "../schemas";
+import { getLocation } from "@/services/viacep";
 
 export function AddProductForm() {
   const [images, setImages] = useState<(File & { preview: string })[]>([]);
@@ -93,13 +92,11 @@ export function AddProductForm() {
 
     if (clean.length !== 8) return null;
 
-    const [error, data] = await to<AxiosResponse<ViaCepResponse>>(
-      axios.get<ViaCepResponse>(`https://viacep.com.br/ws/${clean}/json/`),
-    );
+    const [error, data] = await getLocation({ zipCode });
 
-    if (error || data?.data.erro) return null;
+    if (error || data?.erro) return null;
 
-    return data.data;
+    return data;
   }
 
   async function applyCepToForm() {

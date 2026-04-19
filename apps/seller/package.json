@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7.0.12",
     "@hookform/resolvers": "^5.2.2",
     "@repo/configs": "workspace:*",
+		"@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
     "await-to-js": "^3.0.0",
     "axios": "1.15.0",
