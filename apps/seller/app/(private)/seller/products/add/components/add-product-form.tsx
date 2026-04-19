@@ -41,7 +41,7 @@ import { Controller, useForm } from "react-hook-form";
 import { AddProduct, addProductSchema, ViaCepResponse } from "../schemas";
 
 export function AddProductForm() {
-  const [files, setFiles] = useState<(File & { preview: string })[]>([]);
+  const [images, setImages] = useState<(File & { preview: string })[]>([]);
 
   const form = useForm({
     resolver: zodResolver(addProductSchema),
@@ -51,17 +51,17 @@ export function AddProductForm() {
   const methods = form.watch("delivery.methods");
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const imageFiles = acceptedFiles.filter((file) =>
-        file.type.startsWith("image/"),
+    (acceptedImages: File[]) => {
+      const images = acceptedImages.filter((image) =>
+        image.type.startsWith("image/"),
       );
 
-      setFiles((prev) => {
+      setImages((prev) => {
         const updated = [
           ...prev,
-          ...imageFiles.map((file) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
+          ...images.map((image) =>
+            Object.assign(image, {
+              preview: URL.createObjectURL(image),
             }),
           ),
         ].slice(0, 10);
@@ -82,9 +82,9 @@ export function AddProductForm() {
     maxFiles: 10,
   });
 
-  function removeFile(name: string) {
-    setFiles((prev) => {
-      const updated = prev.filter((file) => file.name !== name);
+  function removeImage(name: string) {
+    setImages((prev) => {
+      const updated = prev.filter((image) => image.name !== name);
 
       form.setValue("images", updated, { shouldValidate: true });
 
@@ -596,16 +596,16 @@ export function AddProductForm() {
                           </div>
                         </div>
 
-                        {files.length > 0 && (
+                        {images.length > 0 && (
                           <div className="grid grid-cols-2 gap-3">
-                            {files.map((file) => (
+                            {images.map((image) => (
                               <div
-                                key={file.name}
+                                key={image.name}
                                 className="relative group border rounded-lg overflow-hidden h-24"
                               >
                                 <Image
-                                  src={file.preview}
-                                  alt={file.name}
+                                  src={image.preview}
+                                  alt={image.name}
                                   fill
                                   className="object-cover"
                                 />
@@ -613,7 +613,7 @@ export function AddProductForm() {
                                 <Button
                                   size="icon"
                                   variant="destructive"
-                                  onClick={() => removeFile(file.name)}
+                                  onClick={() => removeImage(image.name)}
                                   className="cursor-pointer absolute top-1 right-1 h-6 w-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
                                   <Trash2 className="w-3 h-3" />
