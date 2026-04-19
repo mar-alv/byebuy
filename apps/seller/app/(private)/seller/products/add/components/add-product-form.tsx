@@ -30,14 +30,15 @@ import {
   SelectValue,
 } from "@repo/ui/components/ui/select";
 import { Typography } from "@repo/ui/components/typography";
+import { WysiwygEditor } from "@repo/ui/components/wysiwyg-editor";
 import to from "await-to-js";
+import axios, { AxiosResponse } from "axios";
 import Image from "next/image";
 import { Trash2, UploadCloud } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import { AddProduct, addProductSchema, ViaCepResponse } from "../schemas";
-import axios, { AxiosResponse } from "axios";
 
 export function AddProductForm() {
   const [files, setFiles] = useState<(File & { preview: string })[]>([]);
@@ -181,17 +182,18 @@ export function AddProductForm() {
                           )}
                         />
 
-                        {/* TODO: use wysiwyg component */}
                         <Controller
                           name="description"
                           control={form.control}
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Descrição</FieldLabel>
-                              <Input
-                                placeholder="Descreva seu produto..."
-                                {...field}
+
+                              <WysiwygEditor
+                                value={field.value}
+                                onChange={field.onChange}
                               />
+
                               {fieldState.invalid && (
                                 <FieldError errors={[fieldState.error]} />
                               )}

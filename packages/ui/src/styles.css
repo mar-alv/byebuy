@@ -217,4 +217,18 @@
   @apply opacity-90;
 }
 
+.prose {
+  @apply text-sm leading-relaxed;
+}
+
+.prose p {
+  @apply my-2;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  @apply font-semibold;
+}
+
 @source "../**/*.{ts,tsx}";
