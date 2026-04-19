@@ -29,13 +29,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/ui/select";
+import { Typography } from "@repo/ui/components/typography";
+import to from "await-to-js";
 import Image from "next/image";
 import { Trash2, UploadCloud } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
-import { AddProduct, addProductSchema } from "../schemas";
-import { Typography } from "@repo/ui/components/typography";
+import { AddProduct, addProductSchema, ViaCepResponse } from "../schemas";
+import axios, { AxiosResponse } from "axios";
 
 export function AddProductForm() {
   const [files, setFiles] = useState<(File & { preview: string })[]>([]);
@@ -93,12 +95,25 @@ export function AddProductForm() {
 
     if (clean.length !== 8) return null;
 
-    const res = await fetch(`https://viacep.com.br/ws/${clean}/json/`);
-    const data = await res.json();
+    const [error, data] = await to<AxiosResponse<ViaCepResponse>>(
+      axios.get<ViaCepResponse>(`https://viacep.com.br/ws/${clean}/json/`),
+    );
 
-    if (data.erro) return null;
+    if (error || data?.data.erro) return null;
 
-    return data;
+    return data.data;
+  }
+
+  async function applyCepToForm() {
+    if (!zipCode) return;
+
+    const data = await fetchCep(zipCode);
+
+    if (!data) return;
+
+    form.setValue("location.city", data.localidade);
+    form.setValue("location.state", data.uf);
+    form.setValue("location.street", data.logradouro);
   }
 
   async function handleSubmit({}: AddProduct) {
@@ -113,18 +128,8 @@ export function AddProductForm() {
   }
 
   useEffect(() => {
-    const load = async () => {
-      if (!zipCode) return;
-
-      const data = await fetchCep(zipCode);
-      if (!data) return;
-
-      form.setValue("location.city", data.localidade);
-      form.setValue("location.state", data.uf);
-      form.setValue("location.street", data.logradouro);
-    };
-
-    load();
+    applyCepToForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zipCode]);
 
   return (
