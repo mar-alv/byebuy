@@ -1,7 +1,4 @@
-import { Condition, Prisma } from "../../generated/prisma";
-
-type LocationInput = Prisma.ProductLocationCreateWithoutProductInput;
-type DeliveryInput = Prisma.ProductDeliveryCreateWithoutProductInput;
+import { Prisma, Condition } from "../../generated/prisma";
 
 export interface AddProductInput {
   name: string;
@@ -15,6 +12,6 @@ export interface AddProductInput {
 
   sellerClerkId: string;
 
-  location?: LocationInput;
-  delivery?: DeliveryInput;
+  location?: Prisma.ProductLocationCreateWithoutProductInput;
+  delivery?: Prisma.ProductDeliveryCreateWithoutProductInput;
 }
