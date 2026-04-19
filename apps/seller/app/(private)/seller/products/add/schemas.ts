@@ -46,10 +46,20 @@ export const addProductSchema = z.object({
   defects: z.string().max(1000, "Descrição muito longa.").optional(),
 
   location: z.object({
+    zipCode: z
+      .string("O CEP é obrigatório")
+      .min(8, "Informe um CEP válido.")
+      .max(9)
+      .optional(),
+
+    street: z.string().optional(),
+    number: z.string().min(1, "Informe o número.").optional(),
+    complement: z.string().optional(),
+    neighborhood: z.string().min(1, "Informe o bairro.").optional(),
+
     city: z.string("A cidade é obrigatória.").min(1, "Informe a cidade."),
     state: z.string("O estado é obrigatório.").min(1, "Informe o estado."),
-    country: z.string().min(1).default("Brasil"),
-    zipCode: z.string().max(20).optional(),
+    country: z.string().default("Brasil"),
   }),
 
   delivery: z

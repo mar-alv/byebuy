@@ -44,6 +44,8 @@ export function AddProductForm() {
     resolver: zodResolver(addProductSchema),
   });
 
+  const zipCode = form.watch("location.zipCode");
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const imageFiles = acceptedFiles.filter((file) =>
@@ -86,6 +88,19 @@ export function AddProductForm() {
     });
   }
 
+  async function fetchCep(zipCode: string) {
+    const clean = zipCode.replace(/\D/g, "");
+
+    if (clean.length !== 8) return null;
+
+    const res = await fetch(`https://viacep.com.br/ws/${clean}/json/`);
+    const data = await res.json();
+
+    if (data.erro) return null;
+
+    return data;
+  }
+
   async function handleSubmit({}: AddProduct) {
     // TODO: add new product
     // TODO: show error toast
@@ -96,6 +111,21 @@ export function AddProductForm() {
     } */
     // TODO: show success toast
   }
+
+  useEffect(() => {
+    const load = async () => {
+      if (!zipCode) return;
+
+      const data = await fetchCep(zipCode);
+      if (!data) return;
+
+      form.setValue("location.city", data.localidade);
+      form.setValue("location.state", data.uf);
+      form.setValue("location.street", data.logradouro);
+    };
+
+    load();
+  }, [zipCode]);
 
   return (
     <div className="gap-6 flex flex-col">
@@ -283,60 +313,96 @@ export function AddProductForm() {
                       Onde o produto está disponível
                     </CardDescription>
                   </CardHeader>
+
                   <CardContent>
                     <FieldSet>
-                      <FieldLegend className="sr-only">Localização</FieldLegend>
-
-                      <FieldGroup className="space-y-4">
-                        <FieldGroup>
-                          <div className="grid grid-cols-2 gap-4">
-                            <Controller
-                              name="location.city"
-                              control={form.control}
-                              render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                  <FieldLabel>Cidade</FieldLabel>
-                                  <Input
-                                    placeholder="Porto Alegre"
-                                    {...field}
-                                  />
-                                  {fieldState.invalid && (
-                                    <FieldError errors={[fieldState.error]} />
-                                  )}
-                                </Field>
-                              )}
-                            />
-
-                            <Controller
-                              name="location.state"
-                              control={form.control}
-                              render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                  <FieldLabel>Estado</FieldLabel>
-                                  <Input
-                                    placeholder="Rio Grande do Sul"
-                                    {...field}
-                                  />
-                                  {fieldState.invalid && (
-                                    <FieldError errors={[fieldState.error]} />
-                                  )}
-                                </Field>
-                              )}
-                            />
-                          </div>
-                        </FieldGroup>
-
-                        {/* TODO: get info based on typed zipCode */}
+                                            <FieldGroup className="space-y-4">
                         <Controller
                           name="location.zipCode"
                           control={form.control}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>CEP</FieldLabel>
-                              <Input placeholder="xxxxx-xxx" {...field} />
+                              <Input placeholder="00000-000" {...field} />
                             </Field>
                           )}
                         />
+
+                          <div className="grid grid-cols-3 gap-4">
+                            <Controller
+                              name="location.street"
+                              control={form.control}
+                              render={({ field, fieldState }) => (
+                                <Field
+data-invalid={fieldState.invalid}
+                                className="col-span-2"
+>
+                                  <FieldLabel>Rua</FieldLabel>
+                                <Input placeholder="Av. Paulista" {...field} />
+                                                                  </Field>
+                              )}
+                            />
+
+                            <Controller
+                              name="location.number"
+                              control={form.control}
+                              render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                  <FieldLabel>Número</FieldLabel>
+                                <Input placeholder="123" {...field} />
+                                                                  </Field>
+                              )}
+                            />
+                          </div>
+                        
+                        <Controller
+                          name="location.complement"
+                          control={form.control}
+                          render={({ field }) => (
+                            <Field>
+                              <FieldLabel>Complemento</FieldLabel>
+                              <Input
+                                placeholder="Apto, bloco, etc."
+                                {...field}
+                              />
+                            </Field>
+                          )}
+                        />
+
+                        <Controller
+                          name="location.neighborhood"
+                          control={form.control}
+                          render={({ field }) => (
+                            <Field>
+                              <FieldLabel>Bairro</FieldLabel>
+                              <Input placeholder="Centro" {...field} />
+                            </Field>
+                          )}
+                        />
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <Controller
+                            name="location.city"
+                            control={form.control}
+                            render={({ field }) => (
+                              <Field>
+                                <FieldLabel>Cidade</FieldLabel>
+                                <Input placeholder="Porto Alegre" {...field} />
+                              </Field>
+                            )}
+                          />
+
+                          <Controller
+                            name="location.state"
+                            control={form.control}
+                            render={({ field }) => (
+                              <Field>
+                                <FieldLabel>Estado</FieldLabel>
+                                <Input placeholder="RS" {...field} />
+                              </Field>
+                            )}
+                          />
+                        </div>
                       </FieldGroup>
                     </FieldSet>
                   </CardContent>
