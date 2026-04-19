@@ -78,10 +78,9 @@ function ListItem({
 }
 
 // TODO: add mobile version
-// TODO: make it fixed
 export function Header() {
   return (
-    <header className="max-w-306 w-full mx-auto px-6">
+    <header className="max-w-306 w-full mx-auto px-6 fixed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex justify-between items-center">
         <Logo.NoTexts />
         <Search />
