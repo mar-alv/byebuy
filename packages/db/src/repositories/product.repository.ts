@@ -1,9 +1,9 @@
-import { ProductStatus, Product } from "../../../generated/prisma";
-import { prisma } from "../../client";
-import { CreateProductInput } from "./product.types";
+import { ProductStatus } from "../../generated/prisma";
+import { prisma } from "../client";
+import { AddProductInput } from "../types/product.types";
 
-export const productRepo = {
-  create: async (data: CreateProductInput) => {
+export const productRepository = {
+  create: async (data: AddProductInput) => {
     return prisma.product.create({
       data: {
         name: data.name,

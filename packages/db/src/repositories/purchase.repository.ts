@@ -1,6 +1,6 @@
-import { prisma } from "../../client";
+import { prisma } from "../client";
 
-export const purchaseRepo = {
+export const purchaseRepository = {
   create: async (data: {
     buyerClerkId: string;
     items: {
