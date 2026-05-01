@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddProduct, addProductSchema } from "@repo/schemas/seller";
+import { AddProduct, addProductSchema } from "@repo/schemas";
 import { Button } from "@repo/ui/components/ui/button";
 import {
   Card,
