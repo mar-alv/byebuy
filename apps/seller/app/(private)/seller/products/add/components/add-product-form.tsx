@@ -28,14 +28,13 @@ import {
 } from "@repo/ui/components/ui/select";
 import { Typography } from "@repo/ui/components/typography";
 import { WysiwygEditor } from "@repo/ui/components/wysiwyg-editor";
-import { addProduct } from "@/services/add-product";
+import { useAddProduct } from "@/services/add-product";
 import { getLocation } from "@/services/viacep";
 /* import Image from "next/image";
 import { Trash2, UploadCloud } from "lucide-react"; */
 import { /* useCallback */ useEffect /* useState */ } from "react";
 /* import { useDropzone } from "react-dropzone"; */
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function AddProductForm() {
   // const [images, setImages] = useState<(File & { preview: string })[]>([]);
@@ -67,10 +66,10 @@ export function AddProductForm() {
     },
   });
 
-  console.log(form.formState.errors);
-
   const zipCode = form.watch("location.zipCode");
   const methods = form.watch("delivery.methods");
+
+  const { isPending, mutateAsync } = useAddProduct();
 
   /* const onDrop = useCallback(
     (acceptedImages: File[]) => {
@@ -139,17 +138,8 @@ export function AddProductForm() {
     form.setValue("location.street", data.logradouro);
   }
 
-  async function handleSubmit(req: AddProduct) {
-    // TODO: use react query
-    const [error] = await addProduct(req);
-
-    if (error) {
-      toast.error("Não foi possível adicionar o produto. Tente novamente.");
-
-      return;
-    }
-
-    toast.success("Produto adicionado com sucesso.");
+  async function handleSubmit(data: AddProduct) {
+    await mutateAsync(data);
   }
 
   useEffect(() => {
@@ -192,6 +182,7 @@ export function AddProductForm() {
                         <Controller
                           name="name"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Nome</FieldLabel>
@@ -209,6 +200,7 @@ export function AddProductForm() {
                         <Controller
                           name="description"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Descrição</FieldLabel>
@@ -230,6 +222,7 @@ export function AddProductForm() {
                             <Controller
                               name="price"
                               control={form.control}
+                              disabled={isPending}
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Preço</FieldLabel>
@@ -248,6 +241,7 @@ export function AddProductForm() {
                             <Controller
                               name="quantity"
                               control={form.control}
+                              disabled={isPending}
                               render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel>Quantidade</FieldLabel>
@@ -283,6 +277,7 @@ export function AddProductForm() {
                         <Controller
                           name="location.zipCode"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>CEP</FieldLabel>
@@ -295,6 +290,7 @@ export function AddProductForm() {
                           <Controller
                             name="location.street"
                             control={form.control}
+                            disabled={isPending}
                             render={({ field, fieldState }) => (
                               <Field
                                 data-invalid={fieldState.invalid}
@@ -309,6 +305,7 @@ export function AddProductForm() {
                           <Controller
                             name="location.number"
                             control={form.control}
+                            disabled={isPending}
                             render={({ field, fieldState }) => (
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel>Número</FieldLabel>
@@ -321,6 +318,7 @@ export function AddProductForm() {
                         <Controller
                           name="location.complement"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>Complemento</FieldLabel>
@@ -335,6 +333,7 @@ export function AddProductForm() {
                         <Controller
                           name="location.neighborhood"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>Bairro</FieldLabel>
@@ -347,6 +346,7 @@ export function AddProductForm() {
                           <Controller
                             name="location.city"
                             control={form.control}
+                            disabled={isPending}
                             render={({ field }) => (
                               <Field>
                                 <FieldLabel>Cidade</FieldLabel>
@@ -358,6 +358,7 @@ export function AddProductForm() {
                           <Controller
                             name="location.state"
                             control={form.control}
+                            disabled={isPending}
                             render={({ field }) => (
                               <Field>
                                 <FieldLabel>Estado</FieldLabel>
@@ -447,6 +448,7 @@ export function AddProductForm() {
                         <Controller
                           name="condition"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Condição</FieldLabel>
@@ -480,6 +482,7 @@ export function AddProductForm() {
                         <Controller
                           name="usageTime"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>Tempo de uso</FieldLabel>
@@ -491,6 +494,7 @@ export function AddProductForm() {
                         <Controller
                           name="defects"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>Defeitos</FieldLabel>
@@ -520,6 +524,7 @@ export function AddProductForm() {
                         <Controller
                           name="delivery.methods"
                           control={form.control}
+                          disabled={isPending}
                           render={({ field }) => (
                             <Field>
                               <FieldLabel>Métodos de entrega</FieldLabel>
@@ -578,6 +583,7 @@ export function AddProductForm() {
                             <Controller
                               name="delivery.shipping.type"
                               control={form.control}
+                              disabled={isPending}
                               render={({ field }) => (
                                 <Field>
                                   <FieldLabel>Tipo de envio</FieldLabel>
@@ -611,6 +617,7 @@ export function AddProductForm() {
                               <Controller
                                 name="delivery.shipping.price"
                                 control={form.control}
+                                disabled={isPending}
                                 render={({ field }) => (
                                   <Field>
                                     <FieldLabel>Preço</FieldLabel>
@@ -631,6 +638,7 @@ export function AddProductForm() {
                             <Controller
                               name="delivery.pickup.instructions"
                               control={form.control}
+                              disabled={isPending}
                               render={({ field }) => (
                                 <Field>
                                   <FieldLabel>Instruções</FieldLabel>
@@ -650,6 +658,7 @@ export function AddProductForm() {
 
                 <Field className="w-full">
                   <Button
+                    disabled={isPending}
                     size="lg"
                     type="submit"
                     form="add-product-form"

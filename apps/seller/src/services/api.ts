@@ -18,16 +18,10 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-export async function request<T>(
-  config: AxiosRequestConfig,
-): Promise<[Error, undefined] | [null, T]> {
-  const result = await to(api.request<T>(config));
+export async function request<T>(config: AxiosRequestConfig): Promise<T> {
+  const [error, response] = await to(api.request<T>(config));
 
-  if (result[0] !== null) {
-    return [result[0], undefined];
-  }
+  if (error) throw error;
 
-  const response = result[1];
-
-  return [null, response.data];
+  return response.data;
 }
