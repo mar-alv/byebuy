@@ -35,6 +35,7 @@ import { Trash2, UploadCloud } from "lucide-react"; */
 import { /* useCallback */ useEffect /* useState */ } from "react";
 /* import { useDropzone } from "react-dropzone"; */
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddProductForm() {
   // const [images, setImages] = useState<(File & { preview: string })[]>([]);
@@ -140,17 +141,15 @@ export function AddProductForm() {
 
   async function handleSubmit(req: AddProduct) {
     // TODO: use react query
-    const [error, data] = await addProduct(req);
+    const [error] = await addProduct(req);
 
-    console.log(error, data);
-
-    // TODO: show error toast
-    /* if (error) {
-      toast.error("Não foi possível concluir o cadastro. Tente novamente.");
+    if (error) {
+      toast.error("Não foi possível adicionar o produto. Tente novamente.");
 
       return;
-    } */
-    // TODO: show success toast
+    }
+
+    toast.success("Produto adicionado com sucesso.");
   }
 
   useEffect(() => {
