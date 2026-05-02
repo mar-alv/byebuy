@@ -6,6 +6,7 @@ export const productRepository = {
   create: async (data: AddProductInput) => {
     return prisma.product.create({
       data: {
+				// images: undefined, // TODO: remove
         name: data.name,
         description: data.description,
         price: data.price,
