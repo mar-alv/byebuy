@@ -35,7 +35,7 @@ export const addProductSchema = z.object({
       }),
     )
     .min(1, "Pelo menos uma imagem é obrigatória")
-    .max(10, "Máximo de 10 imagens"),
+    .max(10, "Máximo de 10 imagens"), */
 
   condition: z.enum(["new", "like_new", "good", "fair", "poor"], {
     message: "A condição é obrigatória.",
