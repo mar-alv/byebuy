@@ -1,3 +1,12 @@
 packages:
   - "apps/*"
   - "packages/*"
+allowBuilds:
+  '@clerk/shared': false
+  '@prisma/engines': false
+  better-sqlite3: false
+  esbuild: false
+  msw: false
+  prisma: false
+  sharp: false
+  unrs-resolver: false

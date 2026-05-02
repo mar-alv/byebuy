@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",
+    "better-sqlite3": "^12.9.0",
     "tailwindcss": "^4.2.2"
   }
 }
