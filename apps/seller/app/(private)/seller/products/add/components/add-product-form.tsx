@@ -28,24 +28,50 @@ import {
 } from "@repo/ui/components/ui/select";
 import { Typography } from "@repo/ui/components/typography";
 import { WysiwygEditor } from "@repo/ui/components/wysiwyg-editor";
-import Image from "next/image";
-import { Trash2, UploadCloud } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { Controller, useForm } from "react-hook-form";
+import { addProduct } from "@/services/add-product";
 import { getLocation } from "@/services/viacep";
+/* import Image from "next/image";
+import { Trash2, UploadCloud } from "lucide-react"; */
+import { /* useCallback */ useEffect /* useState */ } from "react";
+/* import { useDropzone } from "react-dropzone"; */
+import { Controller, useForm } from "react-hook-form";
 
 export function AddProductForm() {
-  const [images, setImages] = useState<(File & { preview: string })[]>([]);
+  // const [images, setImages] = useState<(File & { preview: string })[]>([]);
 
   const form = useForm({
     resolver: zodResolver(addProductSchema),
+    // TODO: remove
+    defaultValues: {
+      name: "teclado",
+      description: "não tem led colorido",
+      price: "300",
+      quantity: "1",
+      usageTime: "1 dia",
+      defects: "nenhum",
+      condition: "new",
+      delivery: {
+        methods: ["pickup"],
+        pickup: {
+          instructions: "só buscar",
+        },
+        shipping: {
+          price: "0",
+          type: "free",
+        },
+      },
+      location: {
+        zipCode: "91350090",
+      },
+    },
   });
+
+  console.log(form.formState.errors);
 
   const zipCode = form.watch("location.zipCode");
   const methods = form.watch("delivery.methods");
 
-  const onDrop = useCallback(
+  /* const onDrop = useCallback(
     (acceptedImages: File[]) => {
       const images = acceptedImages.filter((image) =>
         image.type.startsWith("image/"),
@@ -85,7 +111,7 @@ export function AddProductForm() {
 
       return updated;
     });
-  }
+  } */
 
   async function fetchCep(zipCode: string) {
     const clean = zipCode.replace(/\D/g, "");
@@ -106,13 +132,18 @@ export function AddProductForm() {
 
     if (!data) return;
 
-    form.setValue("location.city", data.localidade);
     form.setValue("location.state", data.uf);
+    form.setValue("location.city", data.localidade);
+    form.setValue("location.neighborhood", data.bairro);
     form.setValue("location.street", data.logradouro);
   }
 
-  async function handleSubmit({}: AddProduct) {
-    // TODO: add new product
+  async function handleSubmit(req: AddProduct) {
+    // TODO: use react query
+    const [error, data] = await addProduct(req);
+
+    console.log(error, data);
+
     // TODO: show error toast
     /* if (error) {
       toast.error("Não foi possível concluir o cadastro. Tente novamente.");
@@ -343,7 +374,7 @@ export function AddProductForm() {
               </div>
 
               <div className="space-y-6">
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle className="text-base">Imagens</CardTitle>
                     <CardDescription>Adicione fotos do produto</CardDescription>
@@ -398,7 +429,7 @@ export function AddProductForm() {
                       </FieldGroup>
                     </FieldSet>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 <Card>
                   <CardHeader>
