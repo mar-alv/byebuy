@@ -12,14 +12,18 @@ export const addProductSchema = z.object({
     .max(5000, "A descrição é muito longa."),
 
   price: z
-    .string("O preço é obrigatório.")
-    .min(1, "Informe um valor para o preço.")
+    .union([
+      z.string("O preço é obrigatório."),
+      z.number("O preço é obrigatório."),
+    ])
     .transform((val) => Number(val))
     .pipe(z.number().min(1, "O preço deve ser maior que zero.")),
 
   quantity: z
-    .string("A quantidade é obrigatória.")
-    .min(1, "Informe a quantidade disponível.")
+    .union([
+      z.string("A quantidade é obrigatória."),
+      z.number("A quantidade é obrigatória."),
+    ])
     .transform((val) => Number(val))
     .pipe(
       z
@@ -28,7 +32,8 @@ export const addProductSchema = z.object({
         .min(1, "A quantidade deve ser pelo menos 1."),
     ),
 
-  images: z
+  // TODO: uncomment
+  /* images: z
     .array(
       z.instanceof(File).refine((file) => file.type.startsWith("image/"), {
         message: "Apenas imagens são permitidas",
@@ -72,12 +77,9 @@ export const addProductSchema = z.object({
         .object({
           type: z.enum(["free", "fixed", "calculated"]),
           price: z
-            .string()
-            .optional()
-            .transform((val) =>
-              val === undefined || val === "" ? undefined : Number(val),
-            )
-            .pipe(z.number().min(0).optional()),
+            .union([z.string(), z.number()])
+            .transform((val) => Number(val))
+            .pipe(z.number()),
         })
         .optional(),
 
