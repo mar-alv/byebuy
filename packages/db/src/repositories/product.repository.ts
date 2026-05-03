@@ -48,10 +48,19 @@ export const productRepository = {
     return prisma.product.findMany({
       where: { sellerClerkId },
       orderBy: { createdAt: "desc" },
-      include: {
-        location: true,
-        delivery: true,
-        images: true,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        quantity: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            order: true,
+          },
+        },
       },
     });
   },
