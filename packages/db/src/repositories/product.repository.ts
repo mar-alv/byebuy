@@ -6,7 +6,7 @@ export const productRepository = {
   create: async (data: AddProductInput) => {
     return prisma.product.create({
       data: {
-				// images: undefined, // TODO: remove
+        // images: undefined, // TODO: remove
         name: data.name,
         description: data.description,
         price: data.price,
@@ -41,6 +41,18 @@ export const productRepository = {
     return prisma.product.findMany({
       where: { status: ProductStatus.active },
       orderBy: { createdAt: "desc" },
+    });
+  },
+
+  listBySeller: async (sellerClerkId: string) => {
+    return prisma.product.findMany({
+      where: { sellerClerkId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        location: true,
+        delivery: true,
+        images: true,
+      },
     });
   },
 
