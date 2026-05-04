@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactQueryProvider } from "@/components/react-query-provider";
 import { Header } from "@repo/ui/components/header/index";
 import { sonnerConfig } from "@repo/ui/components/ui/sonner";
 import { ThemeProvider } from "@repo/ui/components/ui/theme-provider";
@@ -35,10 +36,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
-            <main className="max-w-306 w-full my-18 mx-auto px-6">
-              {children}
-            </main>
+            <ReactQueryProvider>
+              <Header />
+              <main className="max-w-306 w-full my-18 mx-auto px-6">
+                {children}
+              </main>
+            </ReactQueryProvider>
             <Toaster {...sonnerConfig} />
           </ThemeProvider>
         </ClerkProvider>
