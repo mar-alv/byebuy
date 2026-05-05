@@ -1,20 +1,10 @@
-import { useGetReleases } from "@/services/get-releases";
 import { Metadata } from "next";
+import { Products } from "./components/products";
 
 export const metadata: Metadata = {
   title: "Lançamentos | ByeBuy",
 };
 
 export default function Releases() {
-  const { data, isFetching } = useGetReleases();
-
-  if (isFetching) return <p>carregando...</p>;
-
-  return (
-    <div>
-      {data?.products.map((product) => (
-        <p key={product.id}>{product.name}</p>
-      ))}
-    </div>
-  );
+  return <Products />;
 }

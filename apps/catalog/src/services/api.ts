@@ -4,7 +4,7 @@ import to from "await-to-js";
 import axios, { AxiosRequestConfig } from "axios";
 
 export const api = axios.create({
-  baseURL: urls.sellerApi,
+  baseURL: urls.catalogApi,
   timeout: 5000,
 });
 

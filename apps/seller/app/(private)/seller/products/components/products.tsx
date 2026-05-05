@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 export function AddedProducts() {
-  const { data, error, isFetching } = useGetAddedProducts();
+  const { data, error } = useGetAddedProducts();
 
   useEffect(() => {
     if (error) {
@@ -18,7 +18,7 @@ export function AddedProducts() {
   return (
     <p>
       {data?.products.map((product) => (
-        <p>{product.name}</p>
+        <p key={product.id}>{product.name}</p>
       ))}
     </p>
   );

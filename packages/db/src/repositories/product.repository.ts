@@ -65,6 +65,37 @@ export const productRepository = {
     });
   },
 
+  listRecentActive: async () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 10);
+
+    return prisma.product.findMany({
+      where: {
+        status: ProductStatus.active,
+        createdAt: {
+          gte: date,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        quantity: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            order: true,
+          },
+        },
+      },
+    });
+  },
+
   updateStatus: async (id: string, status: ProductStatus) => {
     return prisma.product.update({
       where: { id },
