@@ -17,6 +17,7 @@ import { CartButton } from "./components/cart-button";
 import { FavoritesButton } from "./components/favorites-button";
 import { Search } from "./components/search";
 import { UserButton } from "./components/user-button";
+import { urls } from "@repo/configs";
 
 // TODO: replace with actual departments and stuff
 const components: { title: string; href: string; description: string }[] = [
@@ -78,9 +79,10 @@ function ListItem({
 }
 
 // TODO: add mobile version
+// FIXME: glass style not working 100%
 export function Header() {
   return (
-    <header className="max-w-306 w-full mx-auto px-6 fixed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="max-w-306 w-full mx-auto px-6 fixed bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="flex justify-between items-center">
         <Logo.NoTexts />
         <Search />
@@ -92,27 +94,9 @@ export function Header() {
         </div>
       </div>
 
-      {/* TODO: uncomment */}
-      {/* <NavigationMenu>
+      <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="w-96">
-                <ListItem href="/docs" title="Introduction">
-                  Re-usable components built with Tailwind CSS.
-                </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
-                </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
-                </ListItem>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem className="hidden md:flex">
+          {/* <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuTrigger>Components</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
@@ -127,18 +111,18 @@ export function Header() {
                 ))}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
 
           <NavigationMenuItem>
             <NavigationMenuLink
               asChild
               className={navigationMenuTriggerStyle()}
             >
-              <Link href="/docs">Docs</Link>
+              <Link href={`${urls.catalog}/releases`}>Ver lançamentos</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
-      </NavigationMenu> */}
+      </NavigationMenu>
     </header>
   );
 }
