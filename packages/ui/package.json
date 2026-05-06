@@ -15,7 +15,7 @@
   "peerDependencies": {
     "@clerk/nextjs": ">=7",
     "@hookform/resolvers": ">=5",
-		"@repo/schemas": "workspace:*",
+    "@repo/schemas": "workspace:*",
     "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19",
@@ -24,6 +24,7 @@
     "zod": ">=4"
   },
   "devDependencies": {
+    "@repo/cart-store": "workspace:*",
     "@repo/configs": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

@@ -575,6 +575,9 @@ importers:
         specifier: '>=4'
         version: 4.4.2
     devDependencies:
+      '@repo/cart-store':
+        specifier: workspace:*
+        version: link:../cart-store
       '@repo/configs':
         specifier: workspace:*
         version: link:../configs
