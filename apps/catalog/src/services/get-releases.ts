@@ -2,14 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { request } from "./api";
 
 export interface GetReleasesResponse {
-  products: {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    // TODO: add images
-  }[];
+  products: ProductData[];
 }
 
 export function useGetReleases() {
