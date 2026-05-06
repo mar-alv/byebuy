@@ -30,7 +30,7 @@ export function Product({ product }: ProductProps) {
   }
 
   return (
-    <Card className="w-full max-w-sm overflow-hidden">
+    <Card className="w-full max-w-64 overflow-hidden">
       <div className="relative h-48 bg-muted flex items-center justify-center">
         <span className="text-sm text-muted-foreground">Imagem em breve</span>
 
