@@ -1,16 +1,18 @@
 "use client";
 
 import { useGetReleases } from "@/services/get-releases";
+import { Product } from "./product";
 
 export function Products() {
   const { data, isFetching } = useGetReleases();
 
+  // TODO: show skeleton
   if (isFetching) return <p>carregando...</p>;
 
   return (
-    <div>
+    <div className="flex flex-wrap">
       {data?.products.map((product) => (
-        <p key={product.id}>{product.name}</p>
+        <Product key={`product-card-${product.id}`} product={product} />
       ))}
     </div>
   );

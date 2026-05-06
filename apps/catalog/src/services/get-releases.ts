@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { request } from "./api";
 
-interface GetReleasesResponse {
+export interface GetReleasesResponse {
   products: {
     id: string;
     name: string;

@@ -9,9 +9,7 @@ export async function getReleasesController(
     const products = await getReleasesUseCase();
 
     return reply.status(200).send({ products });
-  } catch (e){
-		console.log(e);
-		
+  } catch {
     return reply.status(500).send({
       message:
         "Não foi possível listar os últimos lançamentos. Tente novamente.",

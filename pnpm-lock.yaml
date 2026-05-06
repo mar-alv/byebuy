@@ -97,6 +97,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^7.0.12
         version: 7.3.0(next@16.2.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@repo/cart-store':
+        specifier: workspace:*
+        version: link:../../packages/cart-store
       '@repo/configs':
         specifier: workspace:*
         version: link:../../packages/configs
@@ -143,9 +146,55 @@ importers:
       eslint-config-next:
         specifier: 16.2.2
         version: 16.2.2(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.2)
+      lucide-react:
+        specifier: ^1.7.0
+        version: 1.14.0(react@19.2.4)
       tailwindcss:
         specifier: ^4
         version: 4.2.4
+      typescript:
+        specifier: ^5
+        version: 5.9.2
+
+  apps/catalog-api:
+    dependencies:
+      '@repo/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@repo/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      better-sqlite3:
+        specifier: ^12.9.0
+        version: 12.9.0
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      fastify:
+        specifier: ^5.8.5
+        version: 5.8.5
+      zod:
+        specifier: ^4.3.6
+        version: 4.4.2
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@types/node':
+        specifier: ^20
+        version: 20.19.39
+      eslint:
+        specifier: ^9
+        version: 9.39.4(jiti@2.6.1)
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
       typescript:
         specifier: ^5
         version: 5.9.2
@@ -354,6 +403,25 @@ importers:
       fastify:
         specifier: ^5.8.5
         version: 5.8.5
+
+  packages/cart-store:
+    dependencies:
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
+      zustand:
+        specifier: ^5.0.13
+        version: 5.0.13(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.19.17
 
   packages/configs: {}
 
@@ -5417,6 +5485,24 @@ packages:
 
   zod@4.4.2:
     resolution: {integrity: sha512-IynmDyxsEsb9RKzO3J9+4SxXnl2FTFSzNBaKKaMV6tsSk0rw9gYw9gs+JFCq/qk2LCZ78KDwyj+Z289TijSkUw==}
+
+  zustand@5.0.13:
+    resolution: {integrity: sha512-efI2tVaVQPqtOh114loML/Z80Y4NP3yc+Ff0fYiZJPauNeWZeIp/bRFD7I9bfmCOYBh/PHxlglQ9+wvlwnPikQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
 
@@ -10641,3 +10727,9 @@ snapshots:
   zod@3.25.76: {}
 
   zod@4.4.2: {}
+
+  zustand@5.0.13(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4)):
+    optionalDependencies:
+      '@types/react': 19.2.14
+      react: 19.2.4
+      use-sync-external-store: 1.6.0(react@19.2.4)
