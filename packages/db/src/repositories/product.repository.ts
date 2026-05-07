@@ -96,6 +96,43 @@ export const productRepository = {
     });
   },
 
+  searchByText: async (query: string) => {
+    return prisma.product.findMany({
+      where: {
+        status: ProductStatus.active,
+        OR: [
+          {
+            name: {
+              contains: query,
+            },
+          },
+          {
+            description: {
+              contains: query,
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        quantity: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            order: true,
+          },
+        },
+      },
+    });
+  },
+
   updateStatus: async (id: string, status: ProductStatus) => {
     return prisma.product.update({
       where: { id },
