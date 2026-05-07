@@ -103,6 +103,9 @@ importers:
       '@repo/configs':
         specifier: workspace:*
         version: link:../../packages/configs
+      '@repo/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui

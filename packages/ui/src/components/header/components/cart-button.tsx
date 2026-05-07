@@ -28,7 +28,7 @@ export function CartButton() {
               items-center
               justify-center
               rounded-full
-              bg-red-500
+              bg-primary
               px-1
               text-[10px]
               font-bold
