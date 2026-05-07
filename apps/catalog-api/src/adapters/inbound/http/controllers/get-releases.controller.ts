@@ -1,18 +1,19 @@
+import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getReleasesUseCase } from "../../../../application/use-cases/get-releases.use-case";
 
 export async function getReleasesController(
-  req: FastifyRequest,
+  _req: FastifyRequest,
   reply: FastifyReply,
 ) {
-  try {
-    const products = await getReleasesUseCase();
+  const [error, products] = await to(getReleasesUseCase());
 
-    return reply.status(200).send({ products });
-  } catch {
+  if (error) {
     return reply.status(500).send({
       message:
         "Não foi possível listar os últimos lançamentos. Tente novamente.",
     });
   }
+
+  return reply.status(200).send({ products });
 }

@@ -12,6 +12,7 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/schemas": "workspace:*",
+    "await-to-js": "^3.0.0",
     "better-sqlite3": "^12.9.0",
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
