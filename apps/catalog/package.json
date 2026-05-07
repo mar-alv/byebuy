@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7.0.12",
     "@repo/cart-store": "workspace:*",
     "@repo/configs": "workspace:*",
+    "@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.100.8",
     "next": "16.2.2",

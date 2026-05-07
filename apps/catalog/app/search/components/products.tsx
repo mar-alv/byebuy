@@ -1,10 +1,15 @@
 "use client";
 
 import { Products as ProductsBase } from "@/components/products";
-import { useGetReleases } from "@/services/get-releases";
+import { useSearchProducts } from "@/services/search-products";
+import { useSearchParams } from "next/navigation";
 
 export function Products() {
-  const { data, isFetching } = useGetReleases();
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get("q") ?? undefined;
+
+  const { data, isFetching } = useSearchProducts({ query });
 
   return <ProductsBase isFetching={isFetching} products={data?.products} />;
 }
