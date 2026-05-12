@@ -67,6 +67,7 @@ export const productRepository = {
 
   listRecentActive: async () => {
     const date = new Date();
+
     date.setDate(date.getDate() - 10);
 
     return prisma.product.findMany({
@@ -85,6 +86,30 @@ export const productRepository = {
         description: true,
         price: true,
         quantity: true,
+
+        location: {
+          select: {
+            zipCode: true,
+            street: true,
+            number: true,
+            complement: true,
+            neighborhood: true,
+            city: true,
+            state: true,
+            country: true,
+          },
+        },
+
+        delivery: {
+          select: {
+            hasShipping: true,
+            shippingType: true,
+            shippingPrice: true,
+            hasPickup: true,
+            pickupInstructions: true,
+          },
+        },
+
         images: {
           select: {
             id: true,
@@ -122,6 +147,30 @@ export const productRepository = {
         description: true,
         price: true,
         quantity: true,
+
+        location: {
+          select: {
+            zipCode: true,
+            street: true,
+            number: true,
+            complement: true,
+            neighborhood: true,
+            city: true,
+            state: true,
+            country: true,
+          },
+        },
+
+        delivery: {
+          select: {
+            hasShipping: true,
+            shippingType: true,
+            shippingPrice: true,
+            hasPickup: true,
+            pickupInstructions: true,
+          },
+        },
+
         images: {
           select: {
             id: true,

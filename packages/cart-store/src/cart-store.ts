@@ -1,12 +1,36 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type CartItem = {
+export type CartLocation = {
+  zipCode?: string;
+  street?: string;
+  number?: string;
+  complement?: string;
+  neighborhood?: string;
+  city: string;
+  state: string;
+  country: string;
+};
+
+export type CartDelivery = {
+  hasShipping: boolean;
+  shippingType?: "free" | "fixed" | "calculated";
+  shippingPrice?: number;
+  hasPickup: boolean;
+  pickupInstructions?: string;
+};
+
+export type CartItem = {
   id: string;
   name: string;
+  image?: string;
+
   price: number;
   quantity: number;
   inCart: number;
+
+  location?: CartLocation;
+  delivery?: CartDelivery;
 };
 
 type CartStore = {
@@ -20,6 +44,10 @@ type CartStore = {
 
   totalItems(): number;
   totalUnits(): number;
+
+  subtotalPrice(): number;
+  shippingPrice(): number;
+  totalPrice(): number;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -29,6 +57,7 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (product) => {
         const items = get().items;
+
         const existing = items.find((i) => i.id === product.id);
 
         if (existing) {
@@ -39,6 +68,7 @@ export const useCartStore = create<CartStore>()(
               i.id === product.id ? { ...i, inCart: i.inCart + 1 } : i,
             ),
           });
+
           return;
         }
 
@@ -57,8 +87,13 @@ export const useCartStore = create<CartStore>()(
         set({
           items: get().items.map((i) => {
             if (i.id !== id) return i;
+
             if (i.inCart >= i.quantity) return i;
-            return { ...i, inCart: i.inCart + 1 };
+
+            return {
+              ...i,
+              inCart: i.inCart + 1,
+            };
           }),
         });
       },
@@ -68,7 +103,11 @@ export const useCartStore = create<CartStore>()(
           items: get()
             .items.map((i) => {
               if (i.id !== id) return i;
-              return { ...i, inCart: i.inCart - 1 };
+
+              return {
+                ...i,
+                inCart: i.inCart - 1,
+              };
             })
             .filter((i) => i.inCart > 0),
         });
@@ -79,6 +118,18 @@ export const useCartStore = create<CartStore>()(
       totalItems: () => get().items.length,
 
       totalUnits: () => get().items.reduce((sum, item) => sum + item.inCart, 0),
+
+      subtotalPrice: () =>
+        get().items.reduce((sum, item) => sum + item.price * item.inCart, 0),
+
+      shippingPrice: () =>
+        get().items.reduce((sum, item) => {
+          if (!item.delivery?.hasShipping) return sum;
+
+          return sum + (item.delivery.shippingPrice || 0);
+        }, 0),
+
+      totalPrice: () => get().subtotalPrice() + get().shippingPrice(),
     }),
     {
       name: "cart-storage",
