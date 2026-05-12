@@ -1,6 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactQueryProvider } from "@/components/react-query-provider";
 import { sonnerConfig } from "@repo/ui/components/ui/sonner";
 import { ThemeProvider } from "@repo/ui/components/ui/theme-provider";
+import { Header } from "@repo/ui/components/header/index";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -33,7 +35,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <ReactQueryProvider>
+              <Header />
+              <main className="max-w-306 w-full my-18 mx-auto px-6">
+                {children}
+              </main>
+            </ReactQueryProvider>
             <Toaster {...sonnerConfig} />
           </ThemeProvider>
         </ClerkProvider>
