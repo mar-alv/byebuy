@@ -54,16 +54,6 @@ export const useCartStore = create<CartStore>()(
       },
 
       increase: (id) => {
-        console.log(
-          "aaa",
-          get().items,
-          get().items.map((i) => {
-            if (i.id !== id) return i;
-            if (i.inCart >= i.quantity) return i;
-            return { ...i, inCart: i.inCart + 1 };
-          }),
-        );
-
         set({
           items: get().items.map((i) => {
             if (i.id !== id) return i;
