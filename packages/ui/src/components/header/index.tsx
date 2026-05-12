@@ -89,7 +89,8 @@ export function Header() {
         <div className="gap-2 flex items-center">
           <ModeToggle />
           <UserButton />
-          <FavoritesButton />
+					{/* TODO: uncomment */}
+          {/* <FavoritesButton /> */}
           <CartButton />
         </div>
       </div>
