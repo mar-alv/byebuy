@@ -69,12 +69,11 @@ export function SignUpForm() {
           </FieldDescription>
 
           {/* TODO: add sign up with google */}
-
-          <FieldSeparator />
+          {/* <FieldSeparator />
 
           <Typography.Paragraph.S>
             Continuar com endereço de e-mail
-          </Typography.Paragraph.S>
+          </Typography.Paragraph.S> */}
 
           <FieldGroup>
             <div className="grid grid-cols-2 gap-4">

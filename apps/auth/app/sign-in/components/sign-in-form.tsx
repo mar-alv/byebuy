@@ -67,12 +67,11 @@ export function SignInForm() {
           </FieldDescription>
 
           {/* TODO: add sign in with google */}
-
-          <FieldSeparator />
+          {/* <FieldSeparator />
 
           <Typography.Paragraph.S>
             Continuar com endereço de e-mail
-          </Typography.Paragraph.S>
+          </Typography.Paragraph.S> */}
 
           <FieldGroup>
             <Controller
