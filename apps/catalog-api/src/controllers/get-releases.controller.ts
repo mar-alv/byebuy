@@ -1,12 +1,12 @@
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getReleasesUseCase } from "../../../../application/use-cases/get-releases.use-case";
+import { getReleasesService } from "../services/get-releases";
 
 export async function getReleasesController(
   _req: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const [error, products] = await to(getReleasesUseCase());
+  const [error, products] = await to(getReleasesService());
 
   if (error) {
     return reply.status(500).send({
