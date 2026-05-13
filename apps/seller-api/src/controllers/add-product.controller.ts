@@ -2,7 +2,7 @@ import { addProductSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { addProductUseCase } from "../../../../application/use-cases/add-product.use-case";
+import { addProductService } from "../services/add-product";
 
 export async function addProductController(
   req: FastifyRequest,
@@ -18,7 +18,7 @@ export async function addProductController(
   }
 
   const [error, product] = await to(
-    addProductUseCase({
+    addProductService({
       ...parsed.data,
       sellerClerkId: req.userId!,
     }),

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { authPlugin } from "@repo/auth";
 import Fastify from "fastify";
-import catalogRoutes from "./routes/catalog.routes";
+import catalogRoutes from "./routes";
 
 const app = Fastify();
 

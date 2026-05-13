@@ -1,7 +1,11 @@
-import { productRepository } from "../../adapters/outbound/persistence/product.repository";
-import { AddProductInput } from "../ports/inbound/add-product.port";
+import { productRepository } from "@repo/db";
+import { AddProduct } from "@repo/schemas";
 
-export async function addProductUseCase(data: AddProductInput) {
+export async function addProductService(
+  data: AddProduct & {
+    sellerClerkId: string;
+  },
+) {
   return productRepository.create({
     ...data,
     location: data.location ? { ...data.location } : undefined,
