@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { Trash2, Plus, Minus, MapPin, Truck } from "lucide-react";
 
-import { useCartStore } from "@repo/cart-store";
-
 import { Button } from "@repo/ui/components/ui/button";
 import { Card, CardContent } from "@repo/ui/components/ui/card";
 import { Separator } from "@repo/ui/components/ui/separator";

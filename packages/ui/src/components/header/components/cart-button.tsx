@@ -1,15 +1,16 @@
 "use client";
 
-import { useCartStore } from "@repo/cart-store";
+import { useGetCart } from "@repo/api";
 import { urls } from "@repo/configs";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../../ui/button";
 
 export function CartButton() {
-  const items = useCartStore((state) => state.items);
+  const { data } = useGetCart();
 
-  const totalUnits = items.reduce((sum, item) => sum + item.inCart, 0);
+  const totalUnits =
+    data?.items.reduce((sum, item) => sum + item.inCart, 0) || 0;
 
   return (
     <Button asChild size="icon" variant="ghost" className="relative">

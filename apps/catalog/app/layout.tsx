@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { ReactQueryProvider } from "@/components/react-query-provider";
+import { ReactQueryProvider } from "@repo/api";
 import { Header } from "@repo/ui/components/header/index";
 import { sonnerConfig } from "@repo/ui/components/ui/sonner";
 import { ThemeProvider } from "@repo/ui/components/ui/theme-provider";

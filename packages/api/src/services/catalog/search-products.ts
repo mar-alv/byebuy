@@ -1,6 +1,6 @@
 import { Search } from "@repo/schemas";
 import { useQuery } from "@tanstack/react-query";
-import { request } from "./api";
+import { useCatalogApi } from "../../hooks";
 
 export interface SearchProductsRequest extends Partial<Search> {}
 
@@ -9,18 +9,17 @@ export interface SearchProductsResponse {
 }
 
 export function useSearchProducts({ query }: SearchProductsRequest) {
+  const { request } = useCatalogApi();
+
   return useQuery({
     queryKey: ["searchProducts", query],
-    queryFn: () => searchProducts({ query }),
-  });
-}
-
-export async function searchProducts({ query }: SearchProductsRequest) {
-  return await request<SearchProductsResponse>({
-    url: "/search",
-    method: "GET",
-    params: {
-      query,
-    },
+    queryFn: () =>
+      request<SearchProductsResponse>({
+        url: "/search",
+        method: "GET",
+        params: {
+          query,
+        },
+      }),
   });
 }

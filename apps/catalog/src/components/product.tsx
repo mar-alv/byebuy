@@ -1,23 +1,42 @@
 "use client";
 
-import { GetReleasesResponse } from "@/services/get-releases";
-import { useCartStore } from "@repo/cart-store";
+import {
+  GetReleasesResponse,
+  useAddCartItem,
+  useDecreaseCartItem,
+  useGetCart,
+  useIncreaseCartItem,
+} from "@repo/api";
 import { Button } from "@repo/ui/components/ui/button";
 import { Card, CardContent, CardFooter } from "@repo/ui/components/ui/card";
-import { Heart, Minus, Plus } from "lucide-react";
+// TODO: uncomment
+import { /* Heart, */ Minus, Plus } from "lucide-react";
 
 interface ProductProps {
   product: GetReleasesResponse["products"][number];
 }
 
 export function Product({ product }: ProductProps) {
-  const addItem = useCartStore((state) => state.addItem);
-  const decrease = useCartStore((state) => state.decrease);
-  const increase = useCartStore((state) => state.increase);
+  // TODO: use mutations
 
-  const items = useCartStore((state) => state.items);
+  const { mutateAsync: addCartItemMutation, isPending: isAddCartItemPending } =
+    useAddCartItem();
+  const {
+    mutateAsync: decreaseCartItemMutation,
+    isPending: isDecreaseCartItemPending,
+  } = useDecreaseCartItem();
+  const {
+    mutateAsync: increaseCartItemMutation,
+    isPending: isIncreaseCartItemPending,
+  } = useIncreaseCartItem();
 
-  const cartItem = items.find((i) => i.id === product.id);
+  const {
+    data: cart = {
+      items: [],
+    },
+  } = useGetCart();
+
+  const cartItem = cart.items.find((i) => i.id === product.id);
 
   const inCart = !!cartItem;
   const quantity = cartItem?.inCart ?? 0;
@@ -61,7 +80,10 @@ export function Product({ product }: ProductProps) {
 
       <CardFooter className="flex flex-col gap-3 p-4 pt-0 border-0 bg-transparent">
         {!inCart && (
-          <Button className="w-full" onClick={() => addItem(product)}>
+          <Button
+            className="w-full"
+            onClick={() => addCartItemMutation({ productId: product.id })}
+          >
             Adicionar ao carrinho
           </Button>
         )}
@@ -71,7 +93,9 @@ export function Product({ product }: ProductProps) {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => decrease(product.id)}
+              onClick={() =>
+                decreaseCartItemMutation({ productId: product.id })
+              }
             >
               <Minus className="h-4 w-4" />
             </Button>
@@ -80,7 +104,12 @@ export function Product({ product }: ProductProps) {
               {quantity}
             </span>
 
-            <Button size="icon" onClick={() => increase(product.id)}>
+            <Button
+              size="icon"
+              onClick={() =>
+                increaseCartItemMutation({ productId: product.id })
+              }
+            >
               <Plus className="h-4 w-4" />
             </Button>
           </div>

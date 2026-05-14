@@ -1,7 +1,7 @@
 "use client";
 
 import { Products as ProductsBase } from "@/components/products";
-import { useGetReleases } from "@/services/get-releases";
+import { useGetReleases } from "@repo/api";
 
 export function Products() {
   const { data, isFetching } = useGetReleases();

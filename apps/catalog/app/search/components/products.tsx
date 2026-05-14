@@ -1,7 +1,7 @@
 "use client";
 
 import { Products as ProductsBase } from "@/components/products";
-import { useSearchProducts } from "@/services/search-products";
+import { useSearchProducts } from "@repo/api";
 import { useSearchParams } from "next/navigation";
 
 export function Products() {

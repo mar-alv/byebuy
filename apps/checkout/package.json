@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@repo/cart-store": "workspace:*",
+    "@repo/api": "workspace:*",
     "@repo/configs": "workspace:*",
     "@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
