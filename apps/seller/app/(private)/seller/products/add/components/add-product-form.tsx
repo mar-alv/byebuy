@@ -28,8 +28,7 @@ import {
 } from "@repo/ui/components/ui/select";
 import { Typography } from "@repo/ui/components/typography";
 import { WysiwygEditor } from "@repo/ui/components/wysiwyg-editor";
-import { useAddProduct } from "@/services/add-product";
-import { getLocation } from "@/services/viacep";
+import { getLocation, useAddProduct } from "@repo/api";
 /* import Image from "next/image";
 import { Trash2, UploadCloud } from "lucide-react"; */
 import { /* useCallback */ useEffect /* useState */ } from "react";

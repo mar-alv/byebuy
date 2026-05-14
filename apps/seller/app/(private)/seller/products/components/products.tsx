@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAddedProducts } from "@/services/get-added-products";
+import { useGetAddedProducts } from "@repo/api";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
