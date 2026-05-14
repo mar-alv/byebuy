@@ -50,6 +50,7 @@ model Product {
   delivery      ProductDelivery?
   images        ProductImage[]
   purchaseItems PurchaseItem[]
+  cartItems     CartItem[]
 
   @@index([sellerClerkId])
 }
@@ -111,5 +112,31 @@ model PurchaseItem {
   product               Product  @relation(fields: [productId], references: [id])
 
   @@index([purchaseId])
+  @@index([productId])
+}
+
+model Cart {
+  id           String   @id @default(uuid())
+  buyerClerkId String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  items CartItem[]
+}
+
+model CartItem {
+  id String @id @default(uuid())
+
+  cartId    String
+  productId String
+
+  quantity Int
+
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
   @@index([productId])
 }
