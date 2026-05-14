@@ -6,4 +6,5 @@ export const urls = {
   catalogApi: "http://localhost:3004/catalog",
   checkoutApi: "http://localhost:3005/checkout",
   sellerApi: "http://localhost:3006/seller",
+  cartApi: "http://localhost:3007/cart",
 };
