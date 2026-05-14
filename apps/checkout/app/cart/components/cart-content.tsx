@@ -1,12 +1,16 @@
 "use client";
 
-import Image from "next/image";
-import { Trash2, Plus, Minus, MapPin, Truck } from "lucide-react";
-
+import {
+  useDecreaseCartItem,
+  useGetCart,
+  useIncreaseCartItem,
+  useRemoveCartItem,
+} from "@repo/api";
 import { Button } from "@repo/ui/components/ui/button";
 import { Card, CardContent } from "@repo/ui/components/ui/card";
 import { Separator } from "@repo/ui/components/ui/separator";
 import { Badge } from "@repo/ui/components/ui/badge";
+import { Trash2, Plus, Minus, MapPin, Truck } from "lucide-react";
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -17,16 +21,43 @@ function formatPrice(value: number) {
 
 export function CartContent() {
   const {
-    items,
-    increase,
-    decrease,
-    removeItem,
-    subtotalPrice,
-    shippingPrice,
-    totalPrice,
-  } = useCartStore();
+    mutateAsync: decreaseCartItemMutation,
+    isPending: isDecreaseCartItemPending,
+  } = useDecreaseCartItem();
+  const {
+    mutateAsync: increaseCartItemMutation,
+    isPending: isIncreaseCartItemPending,
+  } = useIncreaseCartItem();
+  const {
+    mutateAsync: removeCartItemMutation,
+    isPending: isRemoveCartItemPending,
+  } = useRemoveCartItem();
+  const {
+    data: cart = {
+      items: [],
+    },
+  } = useGetCart();
 
-  if (!items.length) {
+  const subtotalPrice = cart.items.reduce(
+    (total, item) => total + item.price * item.inCart,
+    0,
+  );
+
+  const shippingPrice = cart.items.reduce((total, item) => {
+    if (!item.delivery?.hasShipping) return total;
+
+    return total + (item.delivery.shippingPrice ?? 0);
+  }, 0);
+
+  const totalPrice = subtotalPrice + shippingPrice;
+
+  const disableCartItemButtons =
+    isDecreaseCartItemPending ||
+    isIncreaseCartItemPending ||
+    isRemoveCartItemPending;
+
+  // TODO: add loading
+  if (!cart.items.length) {
     return (
       <Card className="border-dashed">
         <CardContent className="py-16 flex flex-col items-center justify-center text-center space-y-2">
@@ -47,19 +78,26 @@ export function CartContent() {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6">
       <div className="space-y-4">
-        {items.map((item) => (
+        {cart.items.map((item) => (
           <Card key={item.id}>
             <CardContent className="p-4">
               <div className="flex gap-4">
-                <div className="relative h-28 w-28 overflow-hidden rounded-xl bg-muted">
-                  {item.image && (
+                {/* TODO: remove "grid place-items-center" */}
+                <div className="relative h-28 w-28 overflow-hidden rounded-xl bg-muted grid place-items-center">
+                  {/* TODO: uncomment */}
+                  {/* {item.image && (
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
                       className="object-cover"
                     />
-                  )}
+                  )} */}
+
+                  {/* TODO: remove */}
+                  <span className="text-sm text-muted-foreground">
+                    Imagem em breve
+                  </span>
                 </div>
 
                 <div className="flex-1 flex flex-col justify-between gap-4">
@@ -74,9 +112,12 @@ export function CartContent() {
                       </div>
 
                       <Button
+                        disabled={disableCartItemButtons}
+                        onClick={() =>
+                          removeCartItemMutation({ productId: item.id })
+                        }
                         size="icon"
                         variant="ghost"
-                        onClick={() => removeItem(item.id)}
                       >
                         <Trash2 className="size-4" />
                       </Button>
@@ -102,9 +143,12 @@ export function CartContent() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center rounded-lg border">
                       <Button
-                        variant="ghost"
+                        disabled={disableCartItemButtons}
+                        onClick={() =>
+                          decreaseCartItemMutation({ productId: item.id })
+                        }
                         size="icon"
-                        onClick={() => decrease(item.id)}
+                        variant="ghost"
                       >
                         <Minus className="size-4" />
                       </Button>
@@ -114,9 +158,12 @@ export function CartContent() {
                       </span>
 
                       <Button
-                        variant="ghost"
+                        disabled={disableCartItemButtons}
+                        onClick={() =>
+                          increaseCartItemMutation({ productId: item.id })
+                        }
                         size="icon"
-                        onClick={() => increase(item.id)}
+                        variant="ghost"
                       >
                         <Plus className="size-4" />
                       </Button>
@@ -150,16 +197,14 @@ export function CartContent() {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
 
-                <span>{formatPrice(subtotalPrice())}</span>
+                <span>{formatPrice(subtotalPrice)}</span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Entrega</span>
 
                 <span>
-                  {shippingPrice() === 0
-                    ? "Grátis"
-                    : formatPrice(shippingPrice())}
+                  {shippingPrice === 0 ? "Grátis" : formatPrice(shippingPrice)}
                 </span>
               </div>
 
@@ -168,7 +213,7 @@ export function CartContent() {
               <div className="flex items-center justify-between text-base font-semibold">
                 <span>Total</span>
 
-                <span>{formatPrice(totalPrice())}</span>
+                <span>{formatPrice(totalPrice)}</span>
               </div>
             </div>
 

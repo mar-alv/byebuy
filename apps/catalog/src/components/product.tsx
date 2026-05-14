@@ -17,8 +17,6 @@ interface ProductProps {
 }
 
 export function Product({ product }: ProductProps) {
-  // TODO: use mutations
-
   const { mutateAsync: addCartItemMutation, isPending: isAddCartItemPending } =
     useAddCartItem();
   const {
@@ -29,7 +27,6 @@ export function Product({ product }: ProductProps) {
     mutateAsync: increaseCartItemMutation,
     isPending: isIncreaseCartItemPending,
   } = useIncreaseCartItem();
-
   const {
     data: cart = {
       items: [],
@@ -82,6 +79,7 @@ export function Product({ product }: ProductProps) {
         {!inCart && (
           <Button
             className="w-full"
+            disabled={isAddCartItemPending}
             onClick={() => addCartItemMutation({ productId: product.id })}
           >
             Adicionar ao carrinho
@@ -91,11 +89,12 @@ export function Product({ product }: ProductProps) {
         {inCart && (
           <div className="flex items-center justify-center gap-4">
             <Button
-              variant="outline"
-              size="icon"
+              disabled={isDecreaseCartItemPending || isIncreaseCartItemPending}
               onClick={() =>
                 decreaseCartItemMutation({ productId: product.id })
               }
+              size="icon"
+              variant="outline"
             >
               <Minus className="h-4 w-4" />
             </Button>
@@ -105,10 +104,11 @@ export function Product({ product }: ProductProps) {
             </span>
 
             <Button
-              size="icon"
+              disabled={isDecreaseCartItemPending || isIncreaseCartItemPending}
               onClick={() =>
                 increaseCartItemMutation({ productId: product.id })
               }
+              size="icon"
             >
               <Plus className="h-4 w-4" />
             </Button>
