@@ -68,7 +68,7 @@ export const productRepository = {
   listRecentActive: async () => {
     const date = new Date();
 
-    date.setDate(date.getDate() - 10);
+    date.setDate(date.getDate() - 30);
 
     return prisma.product.findMany({
       where: {

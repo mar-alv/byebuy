@@ -11,6 +11,7 @@ import { Card, CardContent } from "@repo/ui/components/ui/card";
 import { Separator } from "@repo/ui/components/ui/separator";
 import { Badge } from "@repo/ui/components/ui/badge";
 import { Trash2, Plus, Minus, MapPin, Truck } from "lucide-react";
+import Link from "next/link";
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -217,8 +218,8 @@ export function CartContent() {
               </div>
             </div>
 
-            <Button size="lg" className="w-full">
-              Finalizar compra
+            <Button asChild size="lg" className="w-full">
+              <Link href="/delivery">Continuar compra</Link>
             </Button>
           </CardContent>
         </Card>
