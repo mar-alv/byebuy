@@ -2,7 +2,7 @@ import { addProductSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { addProductService } from "../services/add-product";
+import { addProductService } from "../services/add-product.service";
 
 export async function addProductController(
   req: FastifyRequest,

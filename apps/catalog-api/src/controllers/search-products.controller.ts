@@ -2,7 +2,7 @@ import { searchSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { searchProductsService } from "../services/search-products";
+import { searchProductsService } from "../services/search-products.service";
 
 export async function searchProductsController(
   req: FastifyRequest,

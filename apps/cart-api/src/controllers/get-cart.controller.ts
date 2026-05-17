@@ -1,6 +1,6 @@
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getCartService } from "../services/get-cart";
+import { getCartService } from "../services/get-cart.service";
 
 export async function getCartController(
   req: FastifyRequest,

@@ -2,7 +2,7 @@ import { increaseCartItemSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { increaseCartItemService } from "../services/increase-cart-item";
+import { increaseCartItemService } from "../services/increase-cart-item.service";
 
 export async function increaseCartItemController(
   req: FastifyRequest,

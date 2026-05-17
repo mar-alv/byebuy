@@ -1,6 +1,6 @@
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getReleasesService } from "../services/get-releases";
+import { getReleasesService } from "../services/get-releases.service";
 
 export async function getReleasesController(
   _req: FastifyRequest,

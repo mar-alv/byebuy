@@ -2,7 +2,7 @@ import { decreaseCartItemSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { decreaseCartItemService } from "../services/decrease-cart-item";
+import { decreaseCartItemService } from "../services/decrease-cart-item.service";
 
 export async function decreaseCartItemController(
   req: FastifyRequest,

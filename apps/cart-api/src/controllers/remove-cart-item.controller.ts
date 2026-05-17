@@ -2,7 +2,7 @@ import { removeCartItemSchema } from "@repo/schemas";
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-import { removeCartItemService } from "../services/remove-cart-item";
+import { removeCartItemService } from "../services/remove-cart-item.service";
 
 export async function removeCartItemController(
   req: FastifyRequest,

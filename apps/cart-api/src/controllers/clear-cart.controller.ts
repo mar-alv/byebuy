@@ -1,6 +1,6 @@
 import to from "await-to-js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { clearCartService } from "../services/clear-cart";
+import { clearCartService } from "../services/clear-cart.service";
 
 export async function clearCartController(
   req: FastifyRequest,
