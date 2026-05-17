@@ -24,6 +24,7 @@ import { Separator } from "@repo/ui/components/ui/separator";
 import { MapPin, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/stores/checkout-store";
+import Link from "next/link";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
@@ -50,18 +51,26 @@ export function CheckoutDeliveryContent() {
   const form = useForm<CheckoutDeliveryInput>({
     resolver: zodResolver(checkoutDeliverySchema),
     defaultValues: {
-      items: cart.items.map((item) => ({
-        productId: item.id,
-        deliveryMethod:
+      items: cart.items.map((item) => {
+        const deliveryMethod =
           item.delivery?.hasShipping && !item.delivery?.hasPickup
             ? "shipping"
-            : "pickup",
-        address: {
-          country: "Brasil",
-          city: "",
-          state: "",
-        },
-      })),
+            : "pickup";
+
+        return {
+          productId: item.id,
+          deliveryMethod,
+
+          address:
+            deliveryMethod === "shipping"
+              ? {
+                  country: "Brasil",
+                  city: "",
+                  state: "",
+                }
+              : undefined,
+        };
+      }),
     },
   });
 
@@ -108,7 +117,7 @@ export function CheckoutDeliveryContent() {
       }
     });
 
-    router.push("/checkout/payment");
+    router.push("/payment");
   }
 
   useEffect(() => {
@@ -186,7 +195,24 @@ export function CheckoutDeliveryContent() {
 
                           <RadioGroup
                             value={field.value}
-                            onValueChange={field.onChange}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+
+                              if (value === "pickup") {
+                                form.setValue(
+                                  `items.${index}.address`,
+                                  undefined,
+                                );
+                              }
+
+                              if (value === "shipping") {
+                                form.setValue(`items.${index}.address`, {
+                                  country: "Brasil",
+                                  city: "",
+                                  state: "",
+                                });
+                              }
+                            }}
                             className="flex flex-wrap gap-6 mt-2"
                           >
                             {canPickup && (

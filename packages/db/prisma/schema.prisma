@@ -90,13 +90,21 @@ model ProductImage {
   @@index([productId])
 }
 
+enum PaymentMethod {
+  pix
+  credit_card
+  debit_card
+}
+
 model Purchase {
-  id           String         @id @default(uuid())
-  buyerClerkId String
-  totalPrice   Int
-  status       PurchaseStatus @default(pending)
-  createdAt    DateTime       @default(now())
-  items        PurchaseItem[]
+  id             String         @id @default(uuid())
+  buyerClerkId   String
+  totalPrice     Int
+  status         PurchaseStatus @default(pending)
+  paymentMethod  PaymentMethod
+  installments   Int?
+  createdAt      DateTime       @default(now())
+  items          PurchaseItem[]
 
   @@index([buyerClerkId])
 }
