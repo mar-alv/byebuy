@@ -14,10 +14,45 @@ export interface CheckoutPayment {
   installments?: number;
 }
 
+export interface CompletedPurchaseItem {
+  id: string;
+  productId: string;
+  name: string;
+  quantity: number;
+  price: number;
+  subtotal: number;
+  deliveryMethod: "pickup" | "shipping";
+  address?: {
+    zipCode?: string;
+    street?: string;
+    number?: string;
+    complement?: string;
+    neighborhood?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+}
+
+export interface CompletedPurchase {
+  id: string;
+  createdAt: string;
+  paymentMethod: "pix" | "credit_card" | "debit_card";
+  installments?: number;
+  subtotalPrice: number;
+  shippingPrice: number;
+  totalPrice: number;
+  items: CompletedPurchaseItem[];
+}
+
 interface CheckoutStore {
   items: CartItem[];
   deliveryItems: CheckoutDeliveryItem[];
   payment: CheckoutPayment;
+
+  completedPurchase?: CompletedPurchase;
+
+  setCompletedPurchase: (purchase: CompletedPurchase) => void;
 
   setItems: (items: CartItem[]) => void;
 
@@ -37,6 +72,13 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
   items: [],
   deliveryItems: [],
   payment: {},
+
+  completedPurchase: undefined,
+
+  setCompletedPurchase: (purchase) =>
+    set({
+      completedPurchase: purchase,
+    }),
 
   setItems: (items) =>
     set({
@@ -114,5 +156,6 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
       items: [],
       deliveryItems: [],
       payment: {},
+      completedPurchase: undefined,
     }),
 }));

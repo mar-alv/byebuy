@@ -47,7 +47,8 @@ function formatPrice(value: number) {
 export function CheckoutPaymentContent() {
   const router = useRouter();
 
-  const { items, deliveryItems, payment, setPayment } = useCheckoutStore();
+  const { items, deliveryItems, payment, reset, setPayment } =
+    useCheckoutStore();
 
   const { mutateAsync, isPending } = useFinishPurchase();
 
@@ -81,7 +82,7 @@ export function CheckoutPaymentContent() {
   async function handleSubmit(data: CheckoutPayment) {
     setPayment(data);
 
-    await mutateAsync({
+    const response = await mutateAsync({
       items: items.map((item) => ({
         productId: item.id,
         quantity: item.inCart,
@@ -90,6 +91,13 @@ export function CheckoutPaymentContent() {
           null,
       })),
       payment: data,
+    });
+
+    useCheckoutStore.setState({
+      completedPurchase: response,
+      items: [],
+      deliveryItems: [],
+      payment: {},
     });
 
     router.push("/success");

@@ -104,6 +104,9 @@ model Purchase {
   paymentMethod  PaymentMethod
   installments   Int?
   createdAt      DateTime       @default(now())
+
+  shippingPrice  Int            @default(0)
+
   items          PurchaseItem[]
 
   @@index([buyerClerkId])
@@ -116,7 +119,20 @@ model PurchaseItem {
   quantity              Int
   priceAtPurchase       Int
   productNameAtPurchase String?
+
+  deliveryMethod        String?
+
+  zipCode               String?
+  street                String?
+  number                String?
+  complement            String?
+  neighborhood          String?
+  city                  String?
+  state                 String?
+  country               String?
+
   purchase              Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
   product               Product  @relation(fields: [productId], references: [id])
 
   @@index([purchaseId])
