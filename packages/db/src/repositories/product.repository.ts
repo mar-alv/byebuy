@@ -65,7 +65,7 @@ export const productRepository = {
     });
   },
 
-  listRecentActive: async () => {
+  listRecentActive: async (userId: string) => {
     const date = new Date();
 
     date.setDate(date.getDate() - 30);
@@ -73,6 +73,9 @@ export const productRepository = {
     return prisma.product.findMany({
       where: {
         status: ProductStatus.active,
+        sellerClerkId: {
+          not: userId,
+        },
         createdAt: {
           gte: date,
         },
@@ -121,19 +124,24 @@ export const productRepository = {
     });
   },
 
-  searchByText: async (query: string) => {
+  searchByText: async (query: string, userId: string) => {
     return prisma.product.findMany({
       where: {
         status: ProductStatus.active,
+        sellerClerkId: {
+          not: userId,
+        },
         OR: [
           {
             name: {
               contains: query,
+              mode: "insensitive",
             },
           },
           {
             description: {
               contains: query,
+              mode: "insensitive",
             },
           },
         ],

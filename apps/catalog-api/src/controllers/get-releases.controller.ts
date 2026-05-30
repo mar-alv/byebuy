@@ -3,10 +3,10 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { getReleasesService } from "../services/get-releases.service";
 
 export async function getReleasesController(
-  _req: FastifyRequest,
+  req: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const [error, products] = await to(getReleasesService());
+  const [error, products] = await to(getReleasesService(req.userId!));
 
   if (error) {
     return reply.status(500).send({

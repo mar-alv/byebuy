@@ -17,7 +17,12 @@ export async function searchProductsController(
     });
   }
 
-  const [error, products] = await to(searchProductsService(parsed.data));
+  const [error, products] = await to(
+    searchProductsService({
+      ...parsed.data,
+      userId: req.userId!,
+    }),
+  );
 
   if (error) {
     return reply.status(500).send({

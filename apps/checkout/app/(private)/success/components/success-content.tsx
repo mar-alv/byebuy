@@ -1,5 +1,6 @@
 "use client";
 
+import { urls } from "@repo/configs";
 import { Badge } from "@repo/ui/components/ui/badge";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -21,7 +22,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -62,8 +62,8 @@ export function CheckoutSuccessContent() {
   const purchase = useCheckoutStore((state) => state.completedPurchase);
   const router = useRouter();
 
-	console.log('purchase', purchase);
-	
+  console.log("purchase", purchase);
+
   /* useEffect(() => {
     if (!purchase) {
       router.replace("/");
@@ -236,7 +236,7 @@ export function CheckoutSuccessContent() {
             </div>
 
             <Button asChild size="lg" className="w-full">
-              <Link href="/">Continuar comprando</Link>
+              <Link href={urls.catalog}>Continuar comprando</Link>
             </Button>
 
             <Button asChild variant="outline" className="w-full">
