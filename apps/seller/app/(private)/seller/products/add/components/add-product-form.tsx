@@ -60,7 +60,7 @@ export function AddProductForm() {
         },
       },
       location: {
-        zipCode: "91350090",
+        zipCode: "90470280",
       },
     },
   });
