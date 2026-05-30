@@ -38,7 +38,7 @@ export default function RootLayout({
           >
             <ReactQueryProvider>
               <Header />
-              <main className="max-w-306 w-full my-18 mx-auto px-6">
+              <main className="max-w-306 w-full my-32 mx-auto px-6">
                 {children}
               </main>
             </ReactQueryProvider>

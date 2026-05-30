@@ -79,25 +79,24 @@ function ListItem({
 }
 
 // TODO: add mobile version
-// FIXME: glass style not working 100%
 export function Header() {
   return (
-    <header className="max-w-306 w-full mx-auto px-6 fixed bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="flex justify-between items-center">
-        <Logo.NoTexts />
-        <Search />
-        <div className="gap-2 flex items-center">
-          <ModeToggle />
-          <UserButton />
-					{/* TODO: uncomment */}
-          {/* <FavoritesButton /> */}
-          <CartButton />
+    <header className="w-full px-6 z-1 fixed bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="max-w-306 w-full mx-auto">
+        <div className="flex justify-between items-center">
+          <Logo.NoTexts />
+          <Search />
+          <div className="gap-2 flex items-center">
+            <ModeToggle />
+            <UserButton />
+            {/* TODO: uncomment */}
+            {/* <FavoritesButton /> */}
+            <CartButton />
+          </div>
         </div>
-      </div>
-
-      <NavigationMenu>
-        <NavigationMenuList>
-          {/* <NavigationMenuItem className="hidden md:flex">
+        <NavigationMenu>
+          <NavigationMenuList>
+            {/* <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuTrigger>Components</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
@@ -114,16 +113,17 @@ export function Header() {
             </NavigationMenuContent>
           </NavigationMenuItem> */}
 
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <Link href={`${urls.catalog}/releases`}>Ver lançamentos</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <Link href={`${urls.catalog}/releases`}>Ver lançamentos</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
     </header>
   );
 }
